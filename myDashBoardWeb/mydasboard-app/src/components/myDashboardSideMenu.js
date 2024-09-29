@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FinanceView from './myDashboardFinanceView';
-import TodoView from './myDashboardTodoView';
+
 
 const SideMenu = () => {
     return (
@@ -13,8 +12,10 @@ const SideMenu = () => {
             height: '100%',
         }}>
             <ul style={{ listStyle: 'none', padding: '0' }}>
+                <li><Link to="/DashboardView">myDasboard</Link></li>
                 <li><Link to="/FinanceView">my Finance</Link></li>
                 <li><Link to="/TodoView">my Todo</Link></li>
+                <li><Link to="/NotesView">my Notes</Link> </li>
             </ul>
         </div>
     );
