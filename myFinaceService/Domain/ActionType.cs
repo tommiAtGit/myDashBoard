@@ -1,10 +1,11 @@
-namespace myFinanceService.domain{
+namespace myFinanceService.Domain{
 
-public enum actionType{
-    deposit,
-    withdrawal,
-    loan,
-    save
+public enum ActionType{
+    UNDEFINED,
+    DEPOSIT,
+    WITHDRAWAL,
+    LOAN,
+    SAVE
 
 }
 }

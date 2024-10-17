@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using myFinanceService.domain;
+using myFinanceService.Domain;
 using myFinanceService.Services;
 
 namespace myFinanceService.controllers
@@ -23,7 +23,7 @@ namespace myFinanceService.controllers
             return Ok(financeActions);
         }
         [HttpGet]
-        public ActionResult<FinanceDTO> GetTransaction(String Id)
+        public ActionResult<FinanceDTO> GetTransaction(Guid Id)
         {
 
             var financeAction = _service.GetTransactionById(Id);
@@ -33,19 +33,19 @@ namespace myFinanceService.controllers
         public ActionResult<IEnumerable<FinanceDTO>> GetTransactionByDate(String startDate, String endDate)
         {
 
-            var financeAction = _service.getTransactionsByDate(startDate, endDate);
+            var financeAction = _service.GetTransactionsByDate(startDate, endDate);
             return Ok(financeAction);
         }
         [HttpPost]
         public ActionResult<FinanceDTO> AddTransaction(FinanceDTO transAction)
         {
-            var financeAction = _service.addTransaction(transAction);
+            var financeAction = _service.AddTransaction(transAction);
             return Ok(financeAction);
         }
         [HttpDelete]
-        public ActionResult deleteTransaction(String Id)
+        public ActionResult DeleteTransaction(Guid Id)
         {
-            var result = _service.deleteTransaction(Id);
+            var result = _service.DeleteTransaction(Id);
             if (!result)
                 return NotFound();
             return NoContent();

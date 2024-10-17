@@ -1,16 +1,20 @@
-using myFinanceService.domain;
-using System.Collections.Generic;
+using myFinanceService.Domain;
 
-namespace myFinanceService.Services{
-    public interface IFinanceTrackerService{
-        IEnumerable<FinanceDTO>GetAllTransactions();
-        FinanceDTO GetTransactionById(String id);
-         IEnumerable<FinanceDTO> getTransactionsByDate(String startDate, String endDate);
-         FinanceDTO addTransaction( FinanceDTO newTransaction);
 
-         FinanceDTO updateTransaction( String Id, FinanceDTO newTransaction);
+namespace myFinanceService.Services
+{
+    public interface IFinanceTrackerService
+    {
+        IEnumerable<FinanceDTO> GetAllTransactions();
+        FinanceDTO GetTransactionById(Guid id);
+        IEnumerable<FinanceDTO> GetTransactionsByDate(String startDate, String endDate);
 
-         bool deleteTransaction(String Id);
+        IEnumerable<FinanceDTO> GetTransactionsByAccount(string account);
+        FinanceDTO AddTransaction(FinanceDTO newTransaction);
+
+        FinanceDTO UpdateTransaction(Guid Id, FinanceDTO newTransaction);
+
+        bool DeleteTransaction(Guid Id);
 
 
     }

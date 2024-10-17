@@ -1,7 +1,7 @@
 using myFinanceService.Services;
 using Xunit;
 
-namespace myFinaceService.Tests.Services
+namespace myFinanceService.Tests.Services
 {
     public class MyHealthServicesTest
     {

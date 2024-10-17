@@ -10,7 +10,8 @@ builder.Services.AddSwaggerGen();
 
 // Register custom services
 builder.Services.AddScoped<IMyHealthService, MyHealthService>();
-
+builder.Services.AddScoped<IFinanceTrackerService, FinanceTrackerService>();
+builder.Services.AddScoped<IBalanceService, BalanceService>();
 
 var app = builder.Build();
 

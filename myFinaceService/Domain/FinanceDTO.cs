@@ -1,14 +1,17 @@
-namespace myFinanceService.domain{
+using myFinanceService.Domain;
+namespace myFinanceService.Domain
+{
 
-public class FinanceDTO{
+    public class FinanceDTO
+    {
 
-private string UUID {get; set;}
-private string ActionType {get; set;}
-private string Description{get;set;}
-private Double Amount{get;set;}
-private DateTime ActionDate{get;set;}
-private Double Balance{get;set;}
-private DateTime BalanceDate{get;set;}
+        public Guid Id { get; set; }
+        public ActionType Type { get; set; }
+        public string Account { get; set; } = "";
+        public string Description { get; set; }="";
+        public Double Amount { get; set; }
+        public DateTime ActionDate { get; set; }
+        
 
-}
+    }
 }
