@@ -1,3 +1,4 @@
+using myTodoService.Domain;
 using myTodoService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddSwaggerGen();
 
 // Register custom services
 builder.Services.AddScoped<IMyHealthService, MyHealthService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 
 var app = builder.Build();
 
