@@ -1,9 +1,9 @@
 using myTodoService.Domain;
-using myNotesService.Repository;
+using myTodoService.Repository;
 
 using System.Collections.Generic;
 
-namespace myNotesService.Services
+namespace myTodoService.Services
 {
     public class TodoService : ITodoService
     {
@@ -28,8 +28,9 @@ namespace myNotesService.Services
                 throw new ArgumentNullException(nameof(newTask), "No task defined");
         }
 
-        public bool DeleteTask(TaskDTO task)
+        public bool DeleteTask(Guid id)
         {
+            TaskDTO task = _repository.GetTaskById(id);
             if (task != null)
             {
                 var result = _repository.DeleteTask(task.Id);
@@ -41,7 +42,7 @@ namespace myNotesService.Services
 
         public IEnumerable<TaskDTO> GetAllTasks()
         {
-            return _repository.getAllTasks();
+            return _repository.GetAllTasks();
         }
 
         public TaskDTO GetTaskById(Guid Id)
@@ -53,22 +54,34 @@ namespace myNotesService.Services
         {
             return _repository.GetTasksByDate(startDate, endDate);
         }
-        public IEnumerable<TaskDTO> GetTaskByStatus(TodoStatus status)
+        public IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status)
         {
+            
             return _repository.GetTasksByStatus(status);
         }
+
         public TaskDTO UpdateTask(TaskDTO task)
         {
-            var t = GetTaskById(task.Id);
-            if ((task.Status == TodoStatus.PROGRESS) && (t.Status == TodoStatus.OPEN))
-                task.DateOpened = DateTime.Now;
-            else if ((task.Status == TodoStatus.DONE) && (t.Status == TodoStatus.PROGRESS))
-                task.DataCompleted = DateTime.Now;
-            else if ((task.Status == TodoStatus.CLOSED) && (t.Status == TodoStatus.DONE))
-                task.DateClosed = DateTime.Now;
-            else
-                throw new ArgumentException(nameof(task.Status), "Dad status change");
+            TaskDTO t = new();
+            t = GetTaskById(task.Id);
+
+            if (task.Status != t.Status)
+            {
+                if ((task.Status == TodoStatus.PROGRESS) && (t.Status == TodoStatus.OPEN))
+                    task.DateOpened = DateTime.Now;
+                else if ((task.Status == TodoStatus.DONE) && (t.Status == TodoStatus.PROGRESS))
+                    task.DataCompleted = DateTime.Now;
+                else if ((task.Status == TodoStatus.OPEN) && (t.Status == TodoStatus.DONE))
+                    task.DataCompleted = DateTime.Now;
+                else if ((task.Status == TodoStatus.CLOSED) && (t.Status == TodoStatus.DONE))
+                    task.DateClosed = DateTime.Now;
+                else
+                    throw new ArgumentException(nameof(task.Status), "Dad status change");
+
+            }
+
             return _repository.UpdateTask(task);
         }
+
     }
 }

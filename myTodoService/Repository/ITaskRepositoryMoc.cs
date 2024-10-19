@@ -2,12 +2,12 @@ using myTodoService.Domain;
 
 
 
-namespace myNotesService.Repository
+namespace myTodoService.Repository
 {
     public interface ITaskReposioryMoc
     {
         public TaskDTO AddNewTask(TaskDTO newTask);
-        public IEnumerable<TaskDTO> getAllTasks();
+        public IEnumerable<TaskDTO> GetAllTasks();
         public TaskDTO GetTaskById(Guid Id);
         public IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status);
 

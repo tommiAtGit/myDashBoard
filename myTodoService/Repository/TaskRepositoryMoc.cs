@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 
-namespace myNotesService.Repository
+namespace myTodoService.Repository
 {
     public class TaskRepositoryMoc : ITaskReposioryMoc
     {
@@ -37,7 +37,7 @@ namespace myNotesService.Repository
                 throw new ArgumentNullException("NotFound", nameof(theTask));
         }
 
-        public IEnumerable<TaskDTO> getAllTasks()
+        public IEnumerable<TaskDTO> GetAllTasks()
         {
             return _mocTasks;
         }

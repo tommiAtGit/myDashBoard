@@ -1,4 +1,3 @@
-using myNotesService.Services;
 using myTodoService.Domain;
 using myTodoService.Services;
 
