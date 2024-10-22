@@ -302,7 +302,7 @@ namespace myFinanceService.Tests.Services
             }
 
             return transactions;
-            ;
+            
         }
 
     }

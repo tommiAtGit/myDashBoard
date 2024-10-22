@@ -23,6 +23,8 @@ namespace myFinanceService.Services
 
             return _balancerepo.AddNewBalance(balance);
         }
+
+
         public IEnumerable<BalanceDTO> GetAllBalances()
         {
             return _balancerepo.GetAllBalances();
@@ -93,6 +95,14 @@ namespace myFinanceService.Services
 
             return balance;
 
+        }
+
+        public bool DeleteBalance(Guid id)
+        {
+            if (id == Guid.Empty )
+                throw new ArgumentException(nameof(id), "Applied account  was null or empty");
+            
+            return _balancerepo.DeleteBalance(id);
         }
     }
 }

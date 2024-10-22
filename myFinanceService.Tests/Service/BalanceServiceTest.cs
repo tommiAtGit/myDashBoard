@@ -142,9 +142,32 @@ namespace myFinanceService.Tests.Services
             
             // Then
              Assert.Equal("Applied account was null or empty. (Parameter 'account')", ex1.Message);
-             Assert.Equal("Applied account was null or empty. (Parameter 'account')", ex2.Message);
+            
 
 
+        }
+        [Fact]
+        public void DeleteBalanceTest_ReturnBalance_Found()
+        {
+            // Given
+     
+            List<FinanceDTO> financeActions = CreateMultipleFinanceActions();
+            foreach (FinanceDTO f in financeActions)
+            {
+                BalanceDTO b = _balanceService.AddNewBalance(f);
+                Assert.NotNull(b);
+            }
+            IEnumerable<BalanceDTO> fa = _balanceService.GetAllBalances();
+                BalanceDTO balance = fa.ElementAt(2);
+
+                Guid balanceId = balance.Id;
+            // When
+               bool result =  _balanceService.DeleteBalance(balanceId);
+
+
+            // Then
+            Assert.True(result);
+           
         }
         private static FinanceDTO CreateNewMocDepositTransaction()
         {

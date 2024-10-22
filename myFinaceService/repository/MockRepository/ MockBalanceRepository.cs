@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using myFinanceService.Domain;
 using System.Linq;
 
@@ -22,7 +23,8 @@ namespace myFinanceService.Repository
 
         }
 
-         public IEnumerable<BalanceDTO> GetAllBalances(){
+
+        public IEnumerable<BalanceDTO> GetAllBalances(){
             return _balance;
          }
 
@@ -59,6 +61,16 @@ namespace myFinanceService.Repository
           
 
            return balance;
+
+        }
+
+        public bool DeleteBalance(Guid id)
+        {
+            var balances = GetAllBalances();
+            var balance = balances.FirstOrDefault(a=>a.Id == id);
+            if(balance == null)
+                return false;
+            return _balance.Remove(balance);
 
         }
 

@@ -16,33 +16,52 @@ namespace myFinanceService.controllers
         {
             _service = financeTrackerService;
         }
+
         [HttpGet]
         public ActionResult<IEnumerable<FinanceDTO>> GetAllTransactions()
         {
             var financeActions = _service.GetAllTransactions();
             return Ok(financeActions);
         }
-        [HttpGet]
+
+        [HttpGet("{id}")]
         public ActionResult<FinanceDTO> GetTransaction(Guid Id)
         {
 
             var financeAction = _service.GetTransactionById(Id);
+            if (financeAction == null) return NotFound();
             return Ok(financeAction);
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<FinanceDTO>> GetTransactionByDate(String startDate, String endDate)
+        public ActionResult<IEnumerable<FinanceDTO>> GetTransactionByDate([FromBody] String startDate, [FromBody] String endDate)
         {
 
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var financeAction = _service.GetTransactionsByDate(startDate, endDate);
+            if ((financeAction == null) || (financeAction.Count() < 1))
+                return NotFound();
             return Ok(financeAction);
         }
+
         [HttpPost]
-        public ActionResult<FinanceDTO> AddTransaction(FinanceDTO transAction)
+        public ActionResult<FinanceDTO> AddTransaction([FromBody] FinanceDTO transAction)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var financeAction = _service.AddTransaction(transAction);
-            return Ok(financeAction);
+            return CreatedAtAction(nameof(GetTransaction), new { id = financeAction.Id }, financeAction);
         }
-        [HttpDelete]
+
+        [HttpPut("{id}")]
+        public ActionResult<FinanceDTO> UpdateTransaction(Guid id, [FromBody] FinanceDTO transAction)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var fianceAction = _service.UpdateTransaction(id, transAction);
+            if (fianceAction == null) return NotFound();
+            return Ok(fianceAction);
+        }
+
+        [HttpDelete("Id")]
         public ActionResult DeleteTransaction(Guid Id)
         {
             var result = _service.DeleteTransaction(Id);

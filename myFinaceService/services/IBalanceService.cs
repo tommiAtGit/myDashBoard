@@ -9,5 +9,7 @@ namespace myFinanceService.Services
         public BalanceDTO GetBalance(string account);
         public IEnumerable<BalanceDTO> GetAllBalances();
 
+        public bool DeleteBalance(Guid id);
+
     }
 }

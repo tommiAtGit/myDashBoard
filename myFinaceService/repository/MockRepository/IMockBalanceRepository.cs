@@ -11,6 +11,8 @@ namespace myFinanceService.Repository
         public IEnumerable<BalanceDTO> GetBalanceHistory(string account);
          public IEnumerable<BalanceDTO> GetAllBalances();
 
+         public bool DeleteBalance(Guid id);
+
 
     }
 
