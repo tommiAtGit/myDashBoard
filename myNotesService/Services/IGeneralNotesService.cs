@@ -5,15 +5,15 @@ namespace myNotesService.Services{
         public IEnumerable<GeneralNotes> GetAllGeneralNotes();
         public GeneralNotes GetGeneralNotesById(Guid id);
 
-        public GeneralNotes GetGeneralNotesByOwner(string owner);
+        public IEnumerable <GeneralNotes> GetGeneralNotesByOwner(string owner);
 
-        public GeneralNotes GetGeneralNotesByDateCreated(DateTime dateCreated);
+        public IEnumerable<GeneralNotes> GetGeneralNotesByDateCreated(DateTime dateCreated);
 
         public IEnumerable <GeneralNotes> GetGeneralNotesByKeyWords(List<string> keyWords);
 
         public GeneralNotes AddGeneralNotes(GeneralNotes notes);
 
-        public GeneralNotes UpdateGeneralNotes(GeneralNotes notes);
+        public GeneralNotes UpdateGeneralNotes(Guid id, GeneralNotes notes);
 
         public bool DeleteGeneralNote(Guid id);
     }

@@ -1,4 +1,6 @@
 using myNotesService.Services;
+using myNotesService.Mapper;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +10,9 @@ builder.Services.AddSwaggerGen();
 
 // Register custom services
 builder.Services.AddScoped<IHealthService, HealthService>();
+
+// Register AutoMapper with DI
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

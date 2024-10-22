@@ -6,9 +6,17 @@ namespace myNotesService.Repository{
 }
 public class GeneralNotesReporitory : IGeneralNotesRpository
 {
+    private List<GeneralNotesDTO> genNotes;
+
+    public GeneralNotesReporitory(){
+        genNotes = [];
+    }
     public GeneralNotesDTO AddGeneralNotes(GeneralNotesDTO notes)
     {
-        throw new NotImplementedException();
+        notes.id = Guid.NewGuid();
+        genNotes.Add(notes);
+        return notes;
+
     }
 
     public bool DeleteGeneralNote(Guid id)
