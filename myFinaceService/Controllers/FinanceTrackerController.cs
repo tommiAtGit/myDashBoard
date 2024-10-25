@@ -1,6 +1,7 @@
 using System.Diagnostics;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Services;
 
 namespace myFinanceService.controllers
@@ -12,20 +13,21 @@ namespace myFinanceService.controllers
     {
 
         private IFinanceTrackerService _service;
+
         public FinanceTrackerController(IFinanceTrackerService financeTrackerService)
         {
             _service = financeTrackerService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<FinanceDTO>> GetAllTransactions()
+        public ActionResult<IEnumerable<Finance>> GetAllTransactions()
         {
             var financeActions = _service.GetAllTransactions();
             return Ok(financeActions);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<FinanceDTO> GetTransaction(Guid Id)
+        public ActionResult<Finance> GetTransaction(Guid Id)
         {
 
             var financeAction = _service.GetTransactionById(Id);
@@ -34,7 +36,7 @@ namespace myFinanceService.controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<FinanceDTO>> GetTransactionByDate([FromBody] String startDate, [FromBody] String endDate)
+        public ActionResult<IEnumerable<Finance>> GetTransactionByDate([FromBody] String startDate, [FromBody] String endDate)
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -45,7 +47,7 @@ namespace myFinanceService.controllers
         }
 
         [HttpPost]
-        public ActionResult<FinanceDTO> AddTransaction([FromBody] FinanceDTO transAction)
+        public ActionResult<Finance> AddTransaction([FromBody] Finance transAction)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var financeAction = _service.AddTransaction(transAction);
@@ -53,7 +55,7 @@ namespace myFinanceService.controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<FinanceDTO> UpdateTransaction(Guid id, [FromBody] FinanceDTO transAction)
+        public ActionResult<Finance> UpdateTransaction(Guid id, [FromBody] Finance transAction)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var fianceAction = _service.UpdateTransaction(id, transAction);

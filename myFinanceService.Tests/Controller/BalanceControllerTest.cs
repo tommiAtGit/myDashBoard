@@ -29,8 +29,8 @@ namespace myFinanceService.Tests.Controllers
         public void GetAllBalancesTest()
         {
             // Given
-            var financeDTOs = utils.CreateNewMocBalancesWithDifferentAccount();
-            _mockService.Setup(service => service.GetAllBalances()).Returns(financeDTOs);
+            var balances = utils.CreateNewMocBalancesWithDifferentAccount();
+            _mockService.Setup(service => service.GetAllBalances()).Returns(balances);
             // When
             var result = _controller.GetAllBalances();
             // Then
@@ -52,7 +52,7 @@ namespace myFinanceService.Tests.Controllers
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
             var returnedBalance = Assert.IsAssignableFrom<BalanceDTO>(okResult.Value);
             Assert.Equal(utils.GetFirstAccount(), returnedBalance.Account);
-            Assert.Equal(balancePocDto.Balance, returnedBalance.Balance);
+            Assert.Equal(balancePocDto.AccountBalance, returnedBalance.Balance);
             Assert.Equal(balancePocDto.BalanceDate, returnedBalance.BalanceDate);
 
         }
@@ -60,8 +60,8 @@ namespace myFinanceService.Tests.Controllers
         public void GetBalanceByAccount_ReturnedNotFound()
         {
             // Given
-            var balancePocDto = utils.CreateBalanceWithFirstAccount();
-            _mockService.Setup(service => service.GetBalance(utils.GetFirstAccount())).Returns(balancePocDto);
+            var balancePoc = utils.CreateBalanceWithFirstAccount();
+            _mockService.Setup(service => service.GetBalance(utils.GetFirstAccount())).Returns(balancePoc);
 
             // When
             var result = _controller.GetBalance(utils.GetSecondAccount());

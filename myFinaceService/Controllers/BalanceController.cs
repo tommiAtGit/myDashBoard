@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Services;
 
 namespace myFinanceService.controllers
@@ -17,13 +18,13 @@ namespace myFinanceService.controllers
             _service = balanceServiceService;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<BalanceDTO>> GetAllBalances()
+        public ActionResult<IEnumerable<Balance>> GetAllBalances()
         {
             var balanceActions = _service.GetAllBalances();
             return Ok(balanceActions);
         }
         [HttpGet("{account}")]
-        public ActionResult<BalanceDTO> GetBalance(string account)
+        public ActionResult<Balance> GetBalance(string account)
         {
              if (!ModelState.IsValid) return BadRequest(ModelState);
             var balanceAction =  _service.GetBalance(account);
@@ -32,14 +33,14 @@ namespace myFinanceService.controllers
         }
         
         [HttpPost]
-        public ActionResult<BalanceDTO> AddBalance( [FromBody] FinanceDTO finance)
+        public ActionResult<Balance> AddBalance( [FromBody] Finance finance)
         {
              if (!ModelState.IsValid) return BadRequest(ModelState);
             var balanceAction = _service.AddNewBalance(finance);
             return CreatedAtAction(nameof(GetBalance), new { account = balanceAction.Id }, balanceAction);
         }
          [HttpPut("{account}")]
-         public ActionResult<BalanceDTO> UpdateBalance(string account, [FromBody]FinanceDTO financeAction){
+         public ActionResult<Balance> UpdateBalance(string account, [FromBody]Finance financeAction){
              if (!ModelState.IsValid) return BadRequest(ModelState);
              var ub = _service.UpdateBalance(account, financeAction );
              if(ub==null)
