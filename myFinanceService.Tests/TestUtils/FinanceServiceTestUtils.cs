@@ -1,4 +1,5 @@
 using myFinanceService.Domain;
+using myFinanceService.Model;
 
 namespace myFinanceService.TestUtils
 {
@@ -25,14 +26,14 @@ namespace myFinanceService.TestUtils
         {
             return NUMBER_OF_TRANSACTIONS;
         }
-        public List<FinanceDTO> CreateNewMocTransactionsWithDifferentAccount()
+        public List<Finance> CreateNewMocTransactionsWithDifferentAccount()
         {
 
-            List<FinanceDTO> transactions = new();
+            List<Finance> transactions = new();
             for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++)
             {
 
-                FinanceDTO dto = new FinanceDTO();
+                Finance dto = new Finance();
                 dto.Id = Guid.NewGuid();
                 dto.Type = ActionType.WITHDRAWAL;
                 dto.Account = FIRST_ACCOUNT;
@@ -41,7 +42,7 @@ namespace myFinanceService.TestUtils
                 dto.ActionDate = DateTime.Now;
                 transactions.Add(dto);
 
-                FinanceDTO dto_a = new FinanceDTO();
+                Finance dto_a = new Finance();
                 dto.Id = Guid.NewGuid();
                 dto_a.Type = ActionType.DEPOSIT;
                 dto_a.Account = FIRST_ACCOUNT;
@@ -50,7 +51,7 @@ namespace myFinanceService.TestUtils
                 dto_a.ActionDate = DateTime.Now;
                 transactions.Add(dto_a);
 
-                FinanceDTO dto_b = new FinanceDTO();
+                Finance dto_b = new Finance();
                 dto.Id = Guid.NewGuid();
                 dto_b.Type = ActionType.WITHDRAWAL;
                 dto_b.Account = SECOND_ACCOUNT;
@@ -59,7 +60,7 @@ namespace myFinanceService.TestUtils
                 dto_b.ActionDate = DateTime.Now;
                 transactions.Add(dto_b);
 
-                FinanceDTO dto_c = new FinanceDTO();
+                Finance dto_c = new Finance();
                 dto.Id = Guid.NewGuid();
                 dto_c.Type = ActionType.DEPOSIT;
                 dto_c.Account = SECOND_ACCOUNT;
@@ -73,20 +74,22 @@ namespace myFinanceService.TestUtils
             return transactions;
 
         }
-        public FinanceDTO CreateNewMocDepositTransaction(Guid id)
+        public Finance CreateNewMocDepositTransaction(Guid id)
         {
-            FinanceDTO dto = new FinanceDTO();
-            dto.Id = id;
-            dto.Type = ActionType.DEPOSIT;
-            dto.Account = FIRST_ACCOUNT;
-            dto.Description = "Save single deposit to my Account";
-            dto.Amount = 200;
-            dto.ActionDate = DateTime.Now;
+            Finance dto = new()
+            {
+                Id = id,
+                Type = ActionType.DEPOSIT,
+                Account = FIRST_ACCOUNT,
+                Description = "Save single deposit to my Account",
+                Amount = 200,
+                ActionDate = DateTime.Now
+            };
             return dto;
         }
-        public FinanceDTO CreateNewMocDepositTransaction()
+        public Finance CreateNewMocDepositTransaction()
         {
-            FinanceDTO dto = new FinanceDTO
+            Finance dto = new Finance
             {
                 Type = ActionType.DEPOSIT,
                 Account = FIRST_ACCOUNT,
@@ -97,13 +100,13 @@ namespace myFinanceService.TestUtils
             return dto;
         }
 
-        public List<BalanceDTO> CreateNewMocBalancesWithDifferentAccount()
+        public List<Balance> CreateNewMocBalancesWithDifferentAccount()
         {
 
-            List<BalanceDTO> balanceDTOs = [];
+            List<Balance> balanceDTOs = [];
             for (int i = 0; i < NUMBER_OF_BALANCES; i++)
             {
-                BalanceDTO balance = new()
+                Balance balance = new()
                 {
                     Id = Guid.NewGuid()
                 };
@@ -111,7 +114,7 @@ namespace myFinanceService.TestUtils
                     balance.Account = FIRST_ACCOUNT;
                 else
                     balance.Account = SECOND_ACCOUNT;
-                balance.Balance = 200;
+                balance.AccountBalance = 200;
                 balance.BalanceDate = DateTime.Now.AddDays(-i);
                 balanceDTOs.Add(balance);
 
@@ -121,13 +124,13 @@ namespace myFinanceService.TestUtils
 
         }
 
-        public BalanceDTO CreateBalanceWithFirstAccount()
+        public Balance CreateBalanceWithFirstAccount()
         {
-            BalanceDTO balance = new()
+            Balance balance = new()
             {
                 Id = Guid.NewGuid(),
                 Account = FIRST_ACCOUNT,
-                Balance = 200,
+                AccountBalance = 200,
                 BalanceDate = DateTime.Now.AddDays(-2)
             };
             return balance;

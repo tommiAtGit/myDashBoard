@@ -1,5 +1,7 @@
 using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Repository;
 
 namespace myFinanceService.Services
@@ -8,28 +10,30 @@ namespace myFinanceService.Services
     {
 
         private IMockBalanceRepository _balancerepo;
-        public BalanceService()
+        private IMapper _mapper;
+        public BalanceService(IMapper mapper)
         {
             _balancerepo = new MockBalanceRepository();
+            _mapper = mapper;
         }
-        public BalanceDTO AddNewBalance(FinanceDTO financeAction)
+        public Balance AddNewBalance(Finance financeAction)
         {
-            BalanceDTO balance = new();
+            Balance balance = new();
 
             if (financeAction == null)
                 throw new ArgumentNullException(nameof(financeAction), "Applied argument was null");
-            balance = CalculateBalance(true,financeAction);
+            balance = CalculateBalance(true,_mapper.Map<Finance>(financeAction));
             balance.Account = financeAction.Account;
 
-            return _balancerepo.AddNewBalance(balance);
+            return _mapper.Map<Balance>(_balancerepo.AddNewBalance(_mapper.Map<BalanceDTO>(balance)));
         }
 
 
-        public IEnumerable<BalanceDTO> GetAllBalances()
+        public IEnumerable<Balance> GetAllBalances()
         {
-            return _balancerepo.GetAllBalances();
+            return _mapper.Map<IEnumerable<Balance>>(_balancerepo.GetAllBalances());
         }
-        public BalanceDTO GetBalance(string account)
+        public Balance GetBalance(string account)
         {
             if ((account == null) || (account == ""))
                 throw new ArgumentException(nameof(account), "Applied account  was null or empty");
@@ -38,24 +42,24 @@ namespace myFinanceService.Services
             {
                 throw new NullReferenceException("No balance found with account" + account);
             }
-            return balance;
+            return _mapper.Map<Balance>(balance);
         }
 
-        public BalanceDTO UpdateBalance(String account, FinanceDTO financeAction)
+        public Balance UpdateBalance(String account, Finance financeAction)
         {
 
             if ((account == null) || (account == ""))
                 throw new ArgumentException("Applied account was null or empty.", nameof(account));
 
 
-            BalanceDTO newBalance = CalculateBalance(false,financeAction);
-            return _balancerepo.UpdateBalance(account, newBalance);
+            var newBalance = CalculateBalance(false,financeAction);
+            return _mapper.Map<Balance>(_balancerepo.UpdateBalance(account, _mapper.Map<BalanceDTO>(newBalance)));
 
         }
 
-        private BalanceDTO CalculateBalance(bool newAction, FinanceDTO financeAction)
+        private Balance CalculateBalance(bool newAction, Finance financeAction)
         {
-            BalanceDTO balance = new();
+            Balance balance = new();
 
             if (financeAction == null)
                 throw new ArgumentNullException(nameof(financeAction), "Applied argument was null");
@@ -64,11 +68,11 @@ namespace myFinanceService.Services
                 switch (financeAction.Type)
                 {
                     case ActionType.DEPOSIT:
-                        balance.Balance =  financeAction.Amount;
+                        balance.AccountBalance =  financeAction.Amount;
                         balance.BalanceDate = DateTime.Now;
                         break;
                     case ActionType.WITHDRAWAL:
-                        balance.Balance =  - financeAction.Amount;
+                        balance.AccountBalance =  - financeAction.Amount;
                         balance.BalanceDate = DateTime.Now;
                         break;
 
@@ -81,11 +85,11 @@ namespace myFinanceService.Services
                 switch (financeAction.Type)
                 {
                     case ActionType.DEPOSIT:
-                        balance.Balance = balance.Balance + financeAction.Amount;
+                        balance.AccountBalance = balance.AccountBalance + financeAction.Amount;
                         balance.BalanceDate = DateTime.Now;
                         break;
                     case ActionType.WITHDRAWAL:
-                        balance.Balance = balance.Balance - financeAction.Amount;
+                        balance.AccountBalance = balance.AccountBalance - financeAction.Amount;
                         balance.BalanceDate = DateTime.Now;
                         break;
 

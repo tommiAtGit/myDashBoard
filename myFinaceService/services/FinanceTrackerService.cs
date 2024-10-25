@@ -1,40 +1,41 @@
+using AutoMapper;
 using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Repository;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace myFinanceService.Services
 {
-    public class FinanceTrackerService : IFinanceTrackerService
+    public class FinanceTrackerService(IMapper mapper) : IFinanceTrackerService
     {
-        private IMockFinanceTrackerRepository _repository;
+        private IMockFinanceTrackerRepository _repository = new MockFinanceTrackerRepository();
+        private IMapper _mapper = mapper;
 
-        public FinanceTrackerService()
-        {
-            _repository = new MockFinanceTrackerRepository();
-        }
-        FinanceDTO IFinanceTrackerService.AddTransaction(FinanceDTO newTransaction)
+        public Finance AddTransaction(Finance newTransaction)
         {
             if (newTransaction != null)
-
-                return _repository.AddNewTransaction(newTransaction);
+            {
+                var financeAction = _mapper.Map<FinanceDTO>(newTransaction);
+                var actionDto = _repository.AddNewTransaction(financeAction);
+                return _mapper.Map<Finance>(actionDto);
+            }
             else
             {
                 throw new ArgumentNullException();
             }
         }
 
-        IEnumerable<FinanceDTO> IFinanceTrackerService.GetAllTransactions()
+        public IEnumerable<Finance> GetAllTransactions()
         {
-            return _repository.GetAllTransactions();
+            return _mapper.Map<IEnumerable<Finance>>(_repository.GetAllTransactions());
         }
 
-        FinanceDTO IFinanceTrackerService.GetTransactionById(Guid id)
+        public Finance GetTransactionById(Guid id)
         {
-            return _repository.GetTransactionById(id);
+            return _mapper.Map<Finance>(_repository.GetTransactionById(id));
         }
 
-        IEnumerable<FinanceDTO> IFinanceTrackerService.GetTransactionsByDate(string startDate, string endDate)
+        public IEnumerable<Finance> GetTransactionsByDate(string startDate, string endDate)
         {
             var cultureInfo = new CultureInfo("fi-FI");
 
@@ -43,24 +44,26 @@ namespace myFinanceService.Services
             DateTime dateEnd = DateTime.Parse(endDate, cultureInfo);
             var end = dateEnd;
 
-            return _repository.GetTransactionByDate(start, end);
+            return _mapper.Map<IEnumerable<Finance>>(_repository.GetTransactionByDate(start, end));
         }
 
-        FinanceDTO IFinanceTrackerService.UpdateTransaction(Guid Id, FinanceDTO newTransaction)
+        public Finance UpdateTransaction(Guid Id, Finance newTransaction)
         {
-            return _repository.UpdateTransaction(Id, newTransaction);
+            var updatedAction = _repository.UpdateTransaction(Id, _mapper.Map<FinanceDTO>(newTransaction));
+            return _mapper.Map<Finance>(updatedAction);
         }
         public bool DeleteTransaction(Guid Id)
         {
             return _repository.DeleteTransaction(Id);
         }
 
-        public IEnumerable<FinanceDTO> GetTransactionsByAccount(string account)
+        public IEnumerable<Finance> GetTransactionsByAccount(string account)
         {
-           if((account == null) || (account == "")){
-            throw new ArgumentException(nameof(account), "Argument null or empty");
-           }
-           return _repository.GetTransactionsByAccount(account);
+            if ((account == null) || (account == ""))
+            {
+                throw new ArgumentException(nameof(account), "Argument null or empty");
+            }
+            return _mapper.Map<IEnumerable<Finance>>(_repository.GetTransactionsByAccount(account));
         }
     }
 }

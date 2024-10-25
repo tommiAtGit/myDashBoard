@@ -56,7 +56,7 @@ namespace myFinanceService.Repository
         public BalanceDTO UpdateBalance(string account, BalanceDTO balanceAction)
         {
            var balance = GetBalance(account);
-           balance.Balance = balanceAction.Balance;
+           balance.AccountBalance = balanceAction.AccountBalance;
            balance.BalanceDate = balanceAction.BalanceDate;
           
 

@@ -3,7 +3,7 @@ using Moq;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using myFinanceService.controllers;
-using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Services;
 using myFinanceService.TestUtils;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -39,7 +39,7 @@ namespace myFinanceService.Tests.Controllers
             // Then
 
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedActions = Assert.IsAssignableFrom<IEnumerable<FinanceDTO>>(okResult.Value);
+            var returnedActions = Assert.IsAssignableFrom<IEnumerable<Finance>>(okResult.Value);
             Assert.Equal( testUtils.GetNumberOfTransactions()* 4, returnedActions?.Count());
         }
 
@@ -48,14 +48,14 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            FinanceDTO finance = testUtils.CreateNewMocDepositTransaction(id);
+            Finance finance = testUtils.CreateNewMocDepositTransaction(id);
             _mockService.Setup(service => service.GetTransactionById(id)).Returns(finance);
             // When
             var result = _controller.GetTransaction(id);
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedAction = Assert.IsType<FinanceDTO>(okResult.Value);
+            var returnedAction = Assert.IsType<Finance>(okResult.Value);
             Assert.Equal(finance.Id, returnedAction.Id);
             Assert.Equal(finance.Type, returnedAction.Type);
             Assert.Equal(testUtils.GetFirstAccount(), returnedAction.Account);
@@ -68,7 +68,7 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            FinanceDTO finance = testUtils.CreateNewMocDepositTransaction(id);
+            Finance finance = testUtils.CreateNewMocDepositTransaction(id);
             _mockService.Setup(service => service.GetTransactionById(Guid.NewGuid())).Returns(finance);
             // When
             var result = _controller.GetTransaction(id);
@@ -83,7 +83,7 @@ namespace myFinanceService.Tests.Controllers
         public void GetFinanceActionByDateTest_ReturnsOKResult_WithListOfObject()
         {
             // Given
-            List<FinanceDTO> finances = testUtils.CreateNewMocTransactionsWithDifferentAccount();
+            List<Finance> finances = testUtils.CreateNewMocTransactionsWithDifferentAccount();
             string startDate = DateTime.Now.AddDays(-3).ToString();
             string endDate = DateTime.Now.AddDays(-1).ToString();
 
@@ -92,7 +92,7 @@ namespace myFinanceService.Tests.Controllers
             var results = _controller.GetTransactionByDate(startDate, endDate);
             // Then
             var okResult = Assert.IsType<OkObjectResult>(results.Result);
-            var returnedFinanceAction = Assert.IsAssignableFrom<IEnumerable<FinanceDTO>>(okResult.Value);
+            var returnedFinanceAction = Assert.IsAssignableFrom<IEnumerable<Finance>>(okResult.Value);
             Assert.Equal(testUtils.GetNumberOfTransactions() * 4, returnedFinanceAction?.Count());
         }
 
@@ -100,7 +100,7 @@ namespace myFinanceService.Tests.Controllers
         public void GetFinanceActionByDateTest_ReturnsNotFoundResult()
         {
            // Given
-            List<FinanceDTO> finances = testUtils.CreateNewMocTransactionsWithDifferentAccount();
+            List<Finance> finances = testUtils.CreateNewMocTransactionsWithDifferentAccount();
             string startDate = DateTime.Now.AddDays(-3).ToString();
             string endDate = DateTime.Now.AddDays(-1).ToString();
 
@@ -117,7 +117,7 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            FinanceDTO newFinance = testUtils.CreateNewMocDepositTransaction(id);
+            Finance newFinance = testUtils.CreateNewMocDepositTransaction(id);
             _mockService.Setup(service => service.AddTransaction(newFinance)).Returns(newFinance);
 
             // Act
@@ -125,7 +125,7 @@ namespace myFinanceService.Tests.Controllers
 
             // Assert
             var okResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-            var returnedAction = Assert.IsType<FinanceDTO>(okResult.Value);
+            var returnedAction = Assert.IsType<Finance>(okResult.Value);
             Assert.Equal(newFinance.Id, returnedAction.Id);
             Assert.Equal(newFinance.Account, returnedAction.Account);
 
@@ -138,7 +138,7 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            FinanceDTO updateFinance =testUtils.CreateNewMocDepositTransaction(id);
+            Finance updateFinance =testUtils.CreateNewMocDepositTransaction(id);
             _mockService.Setup(service => service.UpdateTransaction(id, updateFinance)).Returns(updateFinance);
 
             // When
@@ -146,7 +146,7 @@ namespace myFinanceService.Tests.Controllers
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedProduct = Assert.IsType<FinanceDTO>(okResult.Value);
+            var returnedProduct = Assert.IsType<Finance>(okResult.Value);
             Assert.Equal(updateFinance.Id, returnedProduct.Id);
             Assert.Equal(updateFinance.Account, returnedProduct.Account);
 
@@ -156,7 +156,7 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            FinanceDTO updateFinance = testUtils.CreateNewMocDepositTransaction(id);
+            Finance updateFinance = testUtils.CreateNewMocDepositTransaction(id);
             _mockService.Setup(service => service.UpdateTransaction(Guid.NewGuid(), updateFinance)).Returns(updateFinance);
 
             // When

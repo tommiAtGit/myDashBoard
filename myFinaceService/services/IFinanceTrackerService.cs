@@ -1,18 +1,18 @@
-using myFinanceService.Domain;
+using myFinanceService.Model;
 
 
 namespace myFinanceService.Services
 {
     public interface IFinanceTrackerService
     {
-        IEnumerable<FinanceDTO> GetAllTransactions();
-        FinanceDTO GetTransactionById(Guid id);
-        IEnumerable<FinanceDTO> GetTransactionsByDate(String startDate, String endDate);
+        IEnumerable<Finance> GetAllTransactions();
+        Finance GetTransactionById(Guid id);
+        IEnumerable<Finance> GetTransactionsByDate(String startDate, String endDate);
 
-        IEnumerable<FinanceDTO> GetTransactionsByAccount(string account);
-        FinanceDTO AddTransaction(FinanceDTO newTransaction);
+        IEnumerable<Finance> GetTransactionsByAccount(string account);
+        Finance AddTransaction(Finance newTransaction);
 
-        FinanceDTO UpdateTransaction(Guid Id, FinanceDTO newTransaction);
+        Finance UpdateTransaction(Guid Id, Finance newTransaction);
 
         bool DeleteTransaction(Guid Id);
 

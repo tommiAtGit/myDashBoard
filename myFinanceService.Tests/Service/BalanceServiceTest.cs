@@ -1,8 +1,11 @@
 using System.Net.Http.Headers;
 using System.Runtime.ExceptionServices;
 using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Services;
 using NuGet.Frameworks;
+using AutoMapper;
+using myFinanceService.Mapper;
 
 namespace myFinanceService.Tests.Services
 {
@@ -14,23 +17,31 @@ namespace myFinanceService.Tests.Services
         private const int NUMBER_OF_TRANSACTIONS = 12;
 
         private IBalanceService _balanceService;
+        private IMapper _mapper;
 
         public BalanceServiceTest()
         {
-            _balanceService = new BalanceService();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>(); // Reuse your main profile
+            });
+
+            _mapper = config.CreateMapper();
+
+            _balanceService = new BalanceService(_mapper);
 
         }
         [Fact]
         public void AddBalanceTest()
         {
             // Given
-            FinanceDTO fianceAction = CreateNewMocDepositTransaction();
+            Finance fianceAction = CreateNewMocDepositTransaction();
 
             // When
-            BalanceDTO newBalance = _balanceService.AddNewBalance(fianceAction);
+            Balance newBalance = _balanceService.AddNewBalance(fianceAction);
             // Then
             Assert.NotNull(newBalance);
-            IEnumerable<BalanceDTO> balances = _balanceService.GetAllBalances();
+            IEnumerable<Balance> balances = _balanceService.GetAllBalances();
             Assert.Single(balances);
 
         }
@@ -38,13 +49,13 @@ namespace myFinanceService.Tests.Services
         public void AddBalance_NullAction()
         {
             // Given
-            FinanceDTO? fianceAction = null;
+            Finance? fianceAction = null;
             // When
 
             // Then
             try
             {
-                BalanceDTO newBalance = _balanceService.AddNewBalance(fianceAction);
+                Balance newBalance = _balanceService.AddNewBalance(fianceAction);
             }
             catch (ArgumentNullException e)
             {
@@ -57,10 +68,10 @@ namespace myFinanceService.Tests.Services
         public void GetBalanceTest()
         {
             // Given
-            List<FinanceDTO> financeActions = CreateMultipleFinanceActions();
-            foreach (FinanceDTO f in financeActions)
+            List<Finance> financeActions = CreateMultipleFinanceActions();
+            foreach (Finance f in financeActions)
             {
-                BalanceDTO b = _balanceService.AddNewBalance(f);
+                Balance b = _balanceService.AddNewBalance(f);
                 Assert.NotNull(b);
             }
             // When
@@ -80,10 +91,10 @@ namespace myFinanceService.Tests.Services
         public void GetBalanceWithoutAccount()
         {
             // Given
-            List<FinanceDTO> financeActions = CreateMultipleFinanceActions();
-            foreach (FinanceDTO f in financeActions)
+            List<Finance> financeActions = CreateMultipleFinanceActions();
+            foreach (Finance f in financeActions)
             {
-                BalanceDTO b = _balanceService.AddNewBalance(f);
+                Balance b = _balanceService.AddNewBalance(f);
                 Assert.NotNull(b);
             }
             // When
@@ -102,30 +113,54 @@ namespace myFinanceService.Tests.Services
 
         }
         [Fact]
-        public void UpdateBalance()
+        public void UpdateBalance_UsingDepositAction()
         {
             // Given
-            List<FinanceDTO> financeActions = CreateMultipleFinanceActions();
-            foreach (FinanceDTO f in financeActions)
+            List<Finance> financeActions = CreateMultipleFinanceActions();
+            foreach (Finance f in financeActions)
             {
-                BalanceDTO b = _balanceService.AddNewBalance(f);
+                Balance b = _balanceService.AddNewBalance(f);
                 Assert.NotNull(b);
             }
             // When
-            FinanceDTO u = financeActions.ElementAt(3);
+            Finance u = financeActions.ElementAt(3);
             u.Amount = 200.30;
             u.ActionDate = DateTime.Now;
             u.Description = "Update test";
             u.Type = ActionType.DEPOSIT;
             _balanceService.UpdateBalance(u.Account, u);
             // Then
-            BalanceDTO testBalance = _balanceService.GetBalance(u.Account);
+            Balance testBalance = _balanceService.GetBalance(u.Account);
             Assert.NotNull(testBalance);
             Assert.Equal(testBalance.Account, u.Account);
-            Assert.Equal(400.30, testBalance.Balance);
+            Assert.Equal(400.30, testBalance.AccountBalance);
 
 
 
+
+        }
+        [Fact]
+        public void  UpdateBalance_UsingWithdrawalAction()
+        {
+            // Given
+            List<Finance> financeActions = CreateMultipleFinanceActions();
+            foreach (Finance f in financeActions)
+            {
+                Balance b = _balanceService.AddNewBalance(f);
+                Assert.NotNull(b);
+            }
+            // When
+            Finance u = financeActions.ElementAt(3);
+            u.Amount = 100.30;
+            u.ActionDate = DateTime.Now;
+            u.Description = "Update test Using Withdrawal Action";
+            u.Type = ActionType.WITHDRAWAL;
+            _balanceService.UpdateBalance(u.Account, u);
+            // Then
+            Balance testBalance = _balanceService.GetBalance(u.Account);
+            Assert.NotNull(testBalance);
+            Assert.Equal(testBalance.Account, u.Account);
+            Assert.Equal(99.7, testBalance.AccountBalance);
 
         }
         
@@ -135,7 +170,7 @@ namespace myFinanceService.Tests.Services
             // Given
 
             // When
-            FinanceDTO finance = new();
+            Finance finance = new();
             var ex1 = Assert.Throws<ArgumentException>(() => _balanceService.UpdateBalance("", finance));
            
             var ex2 = Assert.Throws<ArgumentException>(() => _balanceService.UpdateBalance(null, finance));
@@ -151,14 +186,14 @@ namespace myFinanceService.Tests.Services
         {
             // Given
      
-            List<FinanceDTO> financeActions = CreateMultipleFinanceActions();
-            foreach (FinanceDTO f in financeActions)
+            List<Finance> financeActions = CreateMultipleFinanceActions();
+            foreach (Finance f in financeActions)
             {
-                BalanceDTO b = _balanceService.AddNewBalance(f);
+                Balance b = _balanceService.AddNewBalance(f);
                 Assert.NotNull(b);
             }
-            IEnumerable<BalanceDTO> fa = _balanceService.GetAllBalances();
-                BalanceDTO balance = fa.ElementAt(2);
+            IEnumerable<Balance> fa = _balanceService.GetAllBalances();
+                Balance balance = fa.ElementAt(2);
 
                 Guid balanceId = balance.Id;
             // When
@@ -169,33 +204,25 @@ namespace myFinanceService.Tests.Services
             Assert.True(result);
            
         }
-        private static FinanceDTO CreateNewMocDepositTransaction()
+        private static Finance CreateNewMocDepositTransaction()
         {
-            FinanceDTO dto = new FinanceDTO();
-            dto.Type = ActionType.DEPOSIT;
-            dto.Account = FIRST_ACCOUNT;
-            dto.Description = "Save single deposit to my Account";
-            dto.Amount = 200;
-            dto.ActionDate = DateTime.Now;
-            return dto;
-        }
-        private static FinanceDTO CreateNewMocWithdrawalTransaction()
-        {
-            FinanceDTO dto = new FinanceDTO();
-            dto.Type = ActionType.WITHDRAWAL;
-            dto.Account = FIRST_ACCOUNT;
-            dto.Description = "Save single withdrawal to my Account";
-            dto.Amount = 200;
-            dto.ActionDate = DateTime.Now;
+            Finance dto = new Finance
+            {
+                Type = ActionType.DEPOSIT,
+                Account = FIRST_ACCOUNT,
+                Description = "Save single deposit to my Account",
+                Amount = 200,
+                ActionDate = DateTime.Now
+            };
             return dto;
         }
 
-        private static List<FinanceDTO> CreateMultipleFinanceActions()
+        private static List<Finance> CreateMultipleFinanceActions()
         {
-            List<FinanceDTO> financeActions = new();
+            List<Finance> financeActions = new();
             for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++)
             {
-                FinanceDTO dto = new FinanceDTO();
+                Finance dto = new Finance();
                 if (i % 3 == 0)
                     dto.Type = ActionType.WITHDRAWAL;
                 else
@@ -214,12 +241,12 @@ namespace myFinanceService.Tests.Services
         }
 
 
-        private BalanceDTO CreateNewBalanceAction()
+        private Balance CreateNewBalanceAction()
         {
-            BalanceDTO balance = new();
+            Balance balance = new();
 
             balance.Account = FIRST_ACCOUNT;
-            balance.Balance = 235;
+            balance.AccountBalance = 235;
             balance.BalanceDate = DateTime.Today;
 
             return balance;

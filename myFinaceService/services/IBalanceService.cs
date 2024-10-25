@@ -1,13 +1,14 @@
 using myFinanceService.Domain;
+using myFinanceService.Model;
 
 namespace myFinanceService.Services
 {
     public interface IBalanceService
     {
-        public BalanceDTO AddNewBalance(FinanceDTO financeAction);
-        public BalanceDTO UpdateBalance( String account, FinanceDTO financeAction);
-        public BalanceDTO GetBalance(string account);
-        public IEnumerable<BalanceDTO> GetAllBalances();
+        public Balance AddNewBalance(Finance financeAction);
+        public Balance UpdateBalance( String account, Finance financeAction);
+        public Balance GetBalance(string account);
+        public IEnumerable<Balance> GetAllBalances();
 
         public bool DeleteBalance(Guid id);
 
