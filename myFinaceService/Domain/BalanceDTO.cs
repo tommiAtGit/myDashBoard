@@ -6,7 +6,7 @@ namespace myFinanceService.Domain
     {
         public Guid Id;
         public string Account { get; set; } = "";
-        public Double Balance { get; set; }
+        public Double AccountBalance { get; set; }
         public DateTime BalanceDate { get; set; }
     }
 }

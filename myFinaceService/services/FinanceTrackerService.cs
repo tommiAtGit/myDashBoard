@@ -15,14 +15,9 @@ namespace myFinanceService.Services
         {
             if (newTransaction != null)
             {
-
                 var financeAction = _mapper.Map<FinanceDTO>(newTransaction);
-
-                var actionDto = _repository.AddNewTransaction(new FinanceDTO());
-                //var actionDto = _repository.AddNewTransaction(_mapper.Map<FinanceDTO>(newTransaction));
-
+                var actionDto = _repository.AddNewTransaction(financeAction);
                 return _mapper.Map<Finance>(actionDto);
-
             }
             else
             {

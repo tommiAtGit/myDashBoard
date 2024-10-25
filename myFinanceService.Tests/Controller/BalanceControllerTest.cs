@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using myFinanceService.controllers;
 using myFinanceService.Domain;
+using myFinanceService.Model;
 using myFinanceService.Services;
 using myFinanceService.TestUtils;
 
@@ -35,7 +36,7 @@ namespace myFinanceService.Tests.Controllers
             var result = _controller.GetAllBalances();
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedBalance = Assert.IsAssignableFrom<IEnumerable<BalanceDTO>>(okResult.Value);
+            var returnedBalance = Assert.IsAssignableFrom<IEnumerable<Balance>>(okResult.Value);
             Assert.Equal(utils.GetNumberOfBalances(), returnedBalance?.Count());
 
         }
@@ -50,9 +51,9 @@ namespace myFinanceService.Tests.Controllers
             var result = _controller.GetBalance(utils.GetFirstAccount());
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedBalance = Assert.IsAssignableFrom<BalanceDTO>(okResult.Value);
+            var returnedBalance = Assert.IsAssignableFrom<Balance>(okResult.Value);
             Assert.Equal(utils.GetFirstAccount(), returnedBalance.Account);
-            Assert.Equal(balancePocDto.AccountBalance, returnedBalance.Balance);
+            Assert.Equal(balancePocDto.AccountBalance, returnedBalance.AccountBalance);
             Assert.Equal(balancePocDto.BalanceDate, returnedBalance.BalanceDate);
 
         }
@@ -83,7 +84,7 @@ namespace myFinanceService.Tests.Controllers
 
             // Then
             var okResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-            var returnedAction = Assert.IsType<BalanceDTO>(okResult.Value);
+            var returnedAction = Assert.IsType<Balance>(okResult.Value);
             
         }
         [Fact]
@@ -101,7 +102,7 @@ namespace myFinanceService.Tests.Controllers
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedBalance = Assert.IsType<BalanceDTO>(okResult.Value);
+            var returnedBalance = Assert.IsType<Balance>(okResult.Value);
              Assert.Equal(balancePocDto.Id, returnedBalance.Id);
             Assert.Equal(balancePocDto.Account, returnedBalance.Account);
 
