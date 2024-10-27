@@ -7,10 +7,10 @@ namespace myNotesService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GeneneralNotes : ControllerBase
+    public class GeneneralNotesController : ControllerBase
     {
         private readonly IGeneralNotesService _service;
-        public GeneneralNotes(IGeneralNotesService service)
+        public GeneneralNotesController(IGeneralNotesService service)
         {
             _service = service;
 
@@ -26,7 +26,7 @@ namespace myNotesService.Controllers
 
         }
         [HttpGet("{id}")]
-        public ActionResult<GeneralNotes> GetNotesById(Guid id)
+        public ActionResult<GeneralNotes> GetGeneralNotesById(Guid id)
         {
             if (id == Guid.Empty)
                 return NotFound();
@@ -70,7 +70,7 @@ namespace myNotesService.Controllers
             var notes = _service.GetGeneralNotesByDateCreated(dateCreated);
             if (notes == null)
                 return NotFound();
-            return notes;
+            return Ok(notes);
 
         }
 
@@ -80,14 +80,14 @@ namespace myNotesService.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if (notes == null)
                 return NotFound();
-            var updateNotes = _service.UpdateGeneralNotes(notes);
+            var updateNotes = _service.UpdateGeneralNotes(id,notes);
             if (updateNotes == null)
                 return NotFound();
             return updateNotes;
 
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteTask(Guid id)
+        public IActionResult DeleteGenaralNotes(Guid id)
         {
             var result = _service.DeleteGeneralNote(id);
             if (!result) return NotFound();
