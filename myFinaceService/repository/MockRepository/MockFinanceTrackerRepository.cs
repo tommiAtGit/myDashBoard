@@ -41,7 +41,9 @@ namespace myFinanceService.Repository
 
             foreach (FinanceDTO dto in _financeRepo)
             {
-                if ((dto.ActionDate > startTime) && (dto.ActionDate < EndTime))
+
+               
+                if ((dto.ActionDate.CompareTo(startTime)<1) && (dto.ActionDate.CompareTo(EndTime)==1))
                 {
                     _financeByDates.Add(dto);
                 }

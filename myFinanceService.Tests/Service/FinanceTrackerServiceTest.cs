@@ -107,18 +107,21 @@ namespace myFinanceService.Tests.Services
                 }
 
             }
-            var transActionId = actions[1].Id;
+
+            IEnumerable<Finance> savedActions = _financeTracker.GetAllTransactions();
+
+            var savedTransActionId = savedActions.First().Id;
 
             // When
 
-            var transAction = _financeTracker.GetTransactionById(transActionId);
+            var transAction = _financeTracker.GetTransactionById(savedTransActionId);
 
             // Then
 
             Assert.NotNull(transAction);
-            Assert.Equal(actions[1].Id, transAction.Id);
-            Assert.Equal(actions[1].Account, transAction.Account);
-            Assert.Equal(actions[1].ActionDate, transAction.ActionDate);
+            Assert.Equal(savedActions.First().Id, transAction.Id);
+            Assert.Equal(savedActions.First().Account, transAction.Account);
+            Assert.Equal(savedActions.First().ActionDate, transAction.ActionDate);
 
 
         }
@@ -126,10 +129,22 @@ namespace myFinanceService.Tests.Services
         public void GetTransactionByDateTest()
         {
             // Given
+             List<Finance> actions = CreateNewMocWithdrawalTransactions();
+            foreach (Finance f in actions)
+            {
+                var result = _financeTracker.AddTransaction(f);
+                if (result == null)
+                {
+                    throw new Exception();
+                }
+            }
 
             // When
+             var transAction = _financeTracker.GetTransactionsByDate(DateAndTime.Now.ToString(), DateTime.Now.AddDays(-2).ToString());
 
             // Then
+            Assert.NotNull(transAction);
+            Assert.Equal(2,transAction.Count() );
         }
 
         [Fact]
@@ -200,12 +215,15 @@ namespace myFinanceService.Tests.Services
 
             }
             // When
-            var Id = actions[2].Id;
+            IEnumerable<Finance> savedActions = _financeTracker.GetAllTransactions();
+
+            var savedTransActionId = savedActions.First().Id;
+
 
             var action = CreateNewMocDepositTransaction();
-            _financeTracker.UpdateTransaction(Id, action);
+            _financeTracker.UpdateTransaction(savedTransActionId, action);
             // Then
-            var testAction = _financeTracker.GetTransactionById(Id);
+            var testAction = _financeTracker.GetTransactionById(savedTransActionId);
             Assert.NotNull(testAction);
             Assert.Equal(action.Description, testAction.Description);
 
@@ -266,11 +284,12 @@ namespace myFinanceService.Tests.Services
             {
 
                 Finance dto = new Finance();
+                dto.Id = Guid.NewGuid();
                 dto.Type = ActionType.WITHDRAWAL;
                 dto.Account = FIRST_ACCOUNT;
                 dto.Description = "Save to my Account_action#" + i;
                 dto.Amount = 2.5 * i;
-                dto.ActionDate = DateTime.Now;
+                dto.ActionDate = DateTime.Now.AddDays(i*(-1));
                 transactions.Add(dto);
 
             }
@@ -286,6 +305,7 @@ namespace myFinanceService.Tests.Services
             {
 
                 Finance dto = new Finance();
+                dto.Id = Guid.NewGuid();
                 dto.Type = ActionType.WITHDRAWAL;
                 dto.Account = FIRST_ACCOUNT;
                 dto.Description = "Save to my Account_action#" + i + ".0";
@@ -294,6 +314,7 @@ namespace myFinanceService.Tests.Services
                 transactions.Add(dto);
 
                 Finance dto_a = new Finance();
+                dto.Id = Guid.NewGuid();
                 dto_a.Type = ActionType.DEPOSIT;
                 dto_a.Account = FIRST_ACCOUNT;
                 dto_a.Description = "Save to my Account_action#" + i + ".1";
@@ -302,6 +323,7 @@ namespace myFinanceService.Tests.Services
                 transactions.Add(dto_a);
 
                 Finance dto_b = new Finance();
+                dto.Id = Guid.NewGuid();
                 dto_b.Type = ActionType.WITHDRAWAL;
                 dto_b.Account = SECOND_ACCOUNT;
                 dto_b.Description = "Save to my Account_action#" + i + ".2";
@@ -310,6 +332,7 @@ namespace myFinanceService.Tests.Services
                 transactions.Add(dto_b);
 
                 Finance dto_c = new Finance();
+                dto.Id = Guid.NewGuid();
                 dto_c.Type = ActionType.DEPOSIT;
                 dto_c.Account = SECOND_ACCOUNT;
                 dto_c.Description = "Save to my Account_action#" + i + ".3";

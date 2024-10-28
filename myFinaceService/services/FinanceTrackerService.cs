@@ -40,9 +40,9 @@ namespace myFinanceService.Services
             var cultureInfo = new CultureInfo("fi-FI");
 
             DateTime dateStart = DateTime.Parse(startDate, cultureInfo);
-            var start = dateStart;
+            var start = dateStart.Date;
             DateTime dateEnd = DateTime.Parse(endDate, cultureInfo);
-            var end = dateEnd;
+            var end = dateEnd.Date;
 
             return _mapper.Map<IEnumerable<Finance>>(_repository.GetTransactionByDate(start, end));
         }
