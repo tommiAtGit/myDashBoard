@@ -5,12 +5,14 @@ using System.Linq;
 
 namespace myTodoService.Repository
 {
-    public class TaskRepositoryMoc : ITaskReposioryMoc
+    public class TaskRepositoryMoc : ITaskRepositoryMoc
     {
         private List<TaskDTO> _mocTasks;
         public TaskRepositoryMoc()
         {
             _mocTasks ??= [];
+            _mocTasks = MockTasks();
+
         }
 
         public TaskDTO AddNewTask(TaskDTO newTask)
@@ -82,6 +84,32 @@ namespace myTodoService.Repository
             }
 
 
+        }
+        private List<TaskDTO> MockTasks(){
+            const int NUMBER_OF_TASKS = 10;
+
+            List<TaskDTO> taskList = [];
+            for (int i = 0; i < NUMBER_OF_TASKS; i++)
+            {
+                TaskDTO task = new();
+                task.Id = new Guid("8face6e0-fce6-40d6-b3f9-12d2d8dcaba"+i);
+                task.Name = "Create new Task_#" + i;
+                task.Description = "New task for testig_#" + i;
+                task.Reporter = "Tommi_#" + i;
+                task.Owner = "Tommi_#" + i;
+                task.Status = TodoStatus.OPEN;
+                DateTime date = DateTime.Now;
+                task.DateReported = date.AddDays(i * (-1));
+                taskList.Add(task);
+
+            }
+            taskList[2].Status = TodoStatus.CLOSED;
+            taskList[4].Status = TodoStatus.DEPRECATED;
+            taskList[6].Status = TodoStatus.PROGRESS;
+            taskList[8].Status = TodoStatus.PROGRESS;
+            taskList[8].Status = TodoStatus.DONE;
+
+            return taskList;
         }
     }
 

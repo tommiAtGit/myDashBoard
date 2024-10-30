@@ -4,7 +4,7 @@ using myTodoService.Domain;
 
 namespace myTodoService.Repository
 {
-    public interface ITaskReposioryMoc
+    public interface ITaskRepositoryMoc
     {
         public TaskDTO AddNewTask(TaskDTO newTask);
         public IEnumerable<TaskDTO> GetAllTasks();

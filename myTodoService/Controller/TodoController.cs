@@ -18,6 +18,7 @@ namespace myTodoService.controllers
             _toDoService = todoService;
         }
 
+        // GET: api/todo/1
         [HttpGet("{id}")]
         public ActionResult<TaskDTO> GetTaskById(Guid id)
         {
@@ -26,7 +27,8 @@ namespace myTodoService.controllers
                 return NotFound();
             return Ok(task);
         }
-        // GET: api/tasks
+
+        // GET: api/todo
         [HttpGet]
         public ActionResult<IEnumerable<TaskDTO>> GetAllTasks()
         {
@@ -37,10 +39,13 @@ namespace myTodoService.controllers
             return Ok(tasks);
         }
 
-        [HttpPost]
-        public ActionResult<IEnumerable<TaskDTO>> GetTasksByStatus([FromBody] TodoStatus status)
+        // GET: api/todo/taskByStatus
+        [HttpGet("taskByStatus/{taskStatus}")]
+        public ActionResult<IEnumerable<TaskDTO>> GetTasksByStatus(int taskStatus)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            TodoStatus status = (TodoStatus)taskStatus;
             if (status == TodoStatus.UNDEFINED)
                 return NotFound();
             var tasks = _toDoService.GetTasksByStatus(status);
@@ -48,7 +53,7 @@ namespace myTodoService.controllers
         }
 
 
-        // POST: api/products
+        // POST: api/todo
         [HttpPost]
         public ActionResult<TaskDTO> AddTask([FromBody] TaskDTO task)
         {
@@ -61,7 +66,7 @@ namespace myTodoService.controllers
         }
 
         // PUT: api/products/1
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public ActionResult<TaskDTO> UpdateTask(Guid id, [FromBody] TaskDTO task)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
