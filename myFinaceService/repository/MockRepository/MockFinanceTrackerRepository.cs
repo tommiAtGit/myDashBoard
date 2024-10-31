@@ -7,6 +7,8 @@ namespace myFinanceService.Repository
     public class MockFinanceTrackerRepository : IMockFinanceTrackerRepository
     {
         private List<FinanceDTO> _financeRepo;
+        private const string FIRST_ACCOUNT = "FI2180000012345678";
+        private const string SECOND_ACCOUNT = "FI3080010012345690";
         public MockFinanceTrackerRepository()
         {
             _financeRepo = [];
@@ -98,6 +100,8 @@ namespace myFinanceService.Repository
 
             return dto;
         }
+
+       
     }
 
 }

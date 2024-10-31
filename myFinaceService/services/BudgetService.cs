@@ -1,36 +1,64 @@
+using AutoMapper;
+using myFinanceService.Domain;
 using myFinanceService.Model;
+using myFinanceService.Repository;
 
-namespace myFinanceService.Services{
+namespace myFinanceService.Services
+{
     public class BudgetService : IBudgetService
     {
+        private IMockBudgetRepository _repository;
+        private IMapper _mapper;
+
+        public BudgetService(IMapper mapper){
+
+            _mapper = mapper;
+            _repository = new MockBudgetRepository();
+
+        }
         public Budget AddBudget(Budget newBudget)
         {
-            throw new NotImplementedException();
+           BudgetDTO dto = _repository.AddBudget(_mapper.Map<BudgetDTO>(newBudget));
+           return _mapper.Map<Budget>(dto);
+
         }
 
-        public bool DeleteBudget(Guid Id)
+        public IEnumerable<Budget> GetAllBudgets()
         {
-            throw new NotImplementedException();
+          return _mapper.Map<IEnumerable<Budget>>(_repository.GetAllBudgets());
         }
 
-        public List<Budget> GetAccountBudgetHistory(string Account, DateTime startDate, DateTime endDate)
+        public bool DeleteBudget(Guid id)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty )
+                throw new ArgumentException(nameof(id), "Applied id was null or empty");
+
+           return _repository.DeleteBudget(id);
         }
 
         public Budget GetBudgetByAccount(string account)
         {
-            throw new NotImplementedException();
+           if((account == null)||(account==""))
+            throw new ArgumentException(nameof(account), "Applied account was null or empty");
+
+            return _mapper.Map<Budget>(_repository.GetBudgetByAccount(account));
         }
 
-        public Budget GetBudgetById(Guid Id)
+        public Budget GetBudgetById(Guid id)
         {
-            throw new NotImplementedException();
+             if (id == Guid.Empty )
+                throw new ArgumentException(nameof(id), "Applied id was null or empty");
+
+            return _mapper.Map<Budget>(_repository.GetBudgetById(id));
         }
 
-        public Budget UpdateAccountBudget(string account, Budget budget)
+        public Budget UpdateAccountBudget(Guid id, Budget budget)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty )
+                throw new ArgumentException(nameof(id), "Applied id was null or empty");
+
+
+             return _mapper.Map<Budget>(_repository.UpdateBudget(id, _mapper.Map<BudgetDTO>(budget)));
         }
     }
 }
