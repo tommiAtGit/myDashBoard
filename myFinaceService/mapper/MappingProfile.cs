@@ -10,9 +10,12 @@ public class MappingProfile : Profile
         // CreateMap<Source, Destination>
         CreateMap<BalanceDTO, Balance>();
         CreateMap<Balance, BalanceDTO>();
-
+        
         CreateMap<FinanceDTO, Finance>();
         CreateMap<Finance, FinanceDTO>();
+
+        CreateMap<Budget, BudgetDTO>();
+        CreateMap<BudgetDTO, Budget>();
 
     }
 }

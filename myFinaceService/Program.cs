@@ -17,6 +17,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IMyHealthService, MyHealthService>();
 builder.Services.AddScoped<IFinanceTrackerService, FinanceTrackerService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
+builder.Services.AddScoped<IBudgetService, BudgetService>();
 
 var app = builder.Build();
 

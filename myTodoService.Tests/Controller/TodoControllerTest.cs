@@ -92,7 +92,7 @@ namespace myTodoService.Tests.Controllers
             
             _mockTodoService.Setup(service => service.GetTasksByStatus(TodoStatus.OPEN)).Returns(taskDTOs);
             // When
-            var result = _controller.GetTasksByStatus(TodoStatus.OPEN);
+            var result = _controller.GetTasksByStatus((int)TodoStatus.OPEN);
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -111,7 +111,7 @@ namespace myTodoService.Tests.Controllers
             TaskDTO task = CreateSingleTask(id);
             IEnumerable<TaskDTO> taskDTOs = CreateListOfOpenTasks();
             // When
-        var result = _controller.GetTasksByStatus(TodoStatus.UNDEFINED);
+        var result = _controller.GetTasksByStatus((int)TodoStatus.UNDEFINED);
 
             // Then
             var notFoundResult = Assert.IsType<NotFoundResult>(result.Result);

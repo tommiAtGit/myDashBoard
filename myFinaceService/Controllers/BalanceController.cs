@@ -37,7 +37,7 @@ namespace myFinanceService.controllers
         {
              if (!ModelState.IsValid) return BadRequest(ModelState);
             var balanceAction = _service.AddNewBalance(finance);
-            return CreatedAtAction(nameof(GetBalance), new { account = balanceAction.Id }, balanceAction);
+            return CreatedAtAction(nameof(AddBalance), new { account = balanceAction.Id }, balanceAction);
         }
          [HttpPut("{account}")]
          public ActionResult<Balance> UpdateBalance(string account, [FromBody]Finance financeAction){
