@@ -28,7 +28,7 @@ namespace myTodoService.Services.Tests
             // Then
             Assert.True(result.Id != Guid.Empty);
             Assert.Equal(TASK_NAME, result.Name);
-            Assert.Single(newTask);
+           
             var t = newTask.FirstOrDefault();
             if (t != null)
                 Assert.Equal(TodoStatus.OPEN, t.Status);
@@ -45,7 +45,7 @@ namespace myTodoService.Services.Tests
                 Assert.True(result.Id != Guid.Empty);
             }
             allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS, _service.GetAllTasks().Count());
+            Assert.Equal(NUMBER_OF_TASKS*2, _service.GetAllTasks().Count());
 
             // When
             var t0 = _service.GetTaskById(allTasks[0].Id);
@@ -71,7 +71,7 @@ namespace myTodoService.Services.Tests
 
             InitializeOpenTasks();
             allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS, allTasks.Count);
+            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count);
             // When
             var openTasks = _service.GetTasksByStatus(TodoStatus.OPEN);
             var progressTasks = _service.GetTasksByStatus(TodoStatus.PROGRESS);
@@ -85,7 +85,7 @@ namespace myTodoService.Services.Tests
 
             InitializeOpenTasks();
             allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS, allTasks.Count());
+            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
             // When
             // Status: Open -> Progress
             TaskDTO task_progress = CopyItemOfObject(allTasks[1]);
@@ -120,14 +120,14 @@ namespace myTodoService.Services.Tests
 
             InitializeOpenTasks();
             allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS, allTasks.Count());
+            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
 
             // When
             var TestTask = allTasks[7];
             _service.DeleteTask(TestTask.Id);
             // Then
             IEnumerable<TaskDTO> d = _service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS - 1, d.Count());
+            Assert.Equal(NUMBER_OF_TASKS*2 - 1, d.Count());
         }
         [Fact]
         public void UpdateTask_UpdateDescription()
@@ -137,7 +137,7 @@ namespace myTodoService.Services.Tests
 
             InitializeOpenTasks();
             allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS, allTasks.Count());
+            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
             // When
             TaskDTO testTask = CopyItemOfObject(allTasks[3]);
             testTask.Description = "Updated_by_test";

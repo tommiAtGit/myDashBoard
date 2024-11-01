@@ -103,7 +103,7 @@ namespace myFinanceService.TestUtils
         public List<Balance> CreateNewMocBalancesWithDifferentAccount()
         {
 
-            List<Balance> balanceDTOs = [];
+            List<Balance> balances = [];
             for (int i = 0; i < NUMBER_OF_BALANCES; i++)
             {
                 Balance balance = new()
@@ -116,11 +116,11 @@ namespace myFinanceService.TestUtils
                     balance.Account = SECOND_ACCOUNT;
                 balance.AccountBalance = 200;
                 balance.BalanceDate = DateTime.Now.AddDays(-i);
-                balanceDTOs.Add(balance);
+                balances.Add(balance);
 
 
             }
-            return balanceDTOs;
+            return balances;
 
         }
 
@@ -134,6 +134,53 @@ namespace myFinanceService.TestUtils
                 BalanceDate = DateTime.Now.AddDays(-2)
             };
             return balance;
+        }
+
+        public Budget CreateBudget()
+        {
+            Budget budget = new()
+            {
+
+                Id = Guid.NewGuid(),
+                BudgetAccount = FIRST_ACCOUNT,
+                BudgetTitle = "Test budget",
+                BudgetValue = 10000,
+                BudgetStartDate = DateTime.Now.AddDays(-2),
+                BudgetEndDate = DateTime.Now.AddDays(-1)
+            };
+
+            return budget;
+        }
+
+        public List<Budget> CreateBudgetWithDifferentAccount()
+        {
+            List<Budget> budgets = [];
+
+            Budget b1 = new()
+            {
+
+                Id = Guid.NewGuid(),
+                BudgetAccount = FIRST_ACCOUNT,
+                BudgetTitle = "Test budget",
+                BudgetValue = 10000,
+                BudgetStartDate = DateTime.Now.AddDays(-2),
+                BudgetEndDate = DateTime.Now.AddDays(-1)
+            };
+            budgets.Add(b1);
+
+            Budget b2 = new()
+            {
+
+                Id = Guid.NewGuid(),
+                BudgetAccount = FIRST_ACCOUNT,
+                BudgetTitle = "Test budget",
+                BudgetValue = 10000,
+                BudgetStartDate = DateTime.Now.AddDays(-2),
+                BudgetEndDate = DateTime.Now.AddDays(-1)
+            };
+            budgets.Add(b2);
+
+            return budgets;
         }
 
     }
