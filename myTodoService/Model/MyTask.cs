@@ -1,7 +1,9 @@
-namespace myTodoService.Domain
+using myTodoService.Domain;
+
+namespace myTodoService.Model
 {
 
-    public class TaskDTO
+    public class MyTask
     {
 
         public Guid Id { get; set; }

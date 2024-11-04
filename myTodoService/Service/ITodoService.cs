@@ -1,19 +1,21 @@
 using myTodoService.Domain;
+using myTodoService.Model;
+
 using System.Collections.Generic;
 
 namespace myTodoService.Services
 {
     public interface ITodoService
     {
-        IEnumerable<TaskDTO> GetAllTasks();
-        TaskDTO GetTaskById(Guid Id);
+        IEnumerable<MyTask> GetAllTasks();
+        MyTask GetTaskById(Guid Id);
 
-        IEnumerable<TaskDTO> GetTasksByDate(DateTime startDate, DateTime endDate);
-        IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status);
+        IEnumerable<MyTask> GetTasksByDate(DateTime startDate, DateTime endDate);
+        IEnumerable<MyTask> GetTasksByStatus(TodoStatus status);
 
-        TaskDTO AddNewTask(TaskDTO newTask);
+        MyTask AddNewTask(MyTask newTask);
 
-        TaskDTO UpdateTask(TaskDTO task);
+        MyTask UpdateTask(MyTask task);
 
         bool DeleteTask(Guid id);
 

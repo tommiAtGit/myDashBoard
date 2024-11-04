@@ -1,5 +1,7 @@
-using myTodoService.Domain;
+
 using myTodoService.Services;
+using myTodoService.Mapper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Register AutoMapper with DI
+builder.Services.AddAutoMapper(typeof(MappingProfile)); 
 
 // Register custom services
 builder.Services.AddScoped<IMyHealthService, MyHealthService>();

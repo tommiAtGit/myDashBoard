@@ -1,18 +1,23 @@
+using AutoMapper;
 using myTodoService.Domain;
+using myTodoService.Model;
 using myTodoService.Repository;
 
-using System.Collections.Generic;
+
 
 namespace myTodoService.Services
 {
     public class TodoService : ITodoService
     {
         private TaskRepositoryMoc _repository;
-        public TodoService()
+        private IMapper _mapper;
+
+        public TodoService(IMapper mapper)
         {
             _repository = new();
+            _mapper = mapper;
         }
-        public TaskDTO AddNewTask(TaskDTO newTask)
+        public MyTask AddNewTask(MyTask newTask)
         {
 
             if (newTask != null)
@@ -21,8 +26,9 @@ namespace myTodoService.Services
                 {
                     newTask.DateReported = DateTime.Now;
                 }
-                var task = _repository.AddNewTask(newTask);
-                return task;
+                var task = _repository.AddNewTask(_mapper.Map<MyTaskDTO>(newTask));
+                
+                return _mapper.Map<MyTask>(task);
             }
             else
                 throw new ArgumentNullException(nameof(newTask), "No task defined");
@@ -30,7 +36,7 @@ namespace myTodoService.Services
 
         public bool DeleteTask(Guid id)
         {
-            TaskDTO task = _repository.GetTaskById(id);
+            MyTaskDTO task = _repository.GetTaskById(id);
             if (task != null)
             {
                 var result = _repository.DeleteTask(task.Id);
@@ -40,29 +46,29 @@ namespace myTodoService.Services
                 throw new ArgumentNullException(nameof(task), "No task defined");
         }
 
-        public IEnumerable<TaskDTO> GetAllTasks()
+        public IEnumerable<MyTask> GetAllTasks()
         {
-            return _repository.GetAllTasks();
+            return _mapper.Map<IEnumerable<MyTask>>(_repository.GetAllTasks());
         }
 
-        public TaskDTO GetTaskById(Guid Id)
+        public MyTask GetTaskById(Guid Id)
         {
-            return _repository.GetTaskById(Id);
+            return _mapper.Map<MyTask>(_repository.GetTaskById(Id));
         }
 
-        public IEnumerable<TaskDTO> GetTasksByDate(DateTime startDate, DateTime endDate)
+        public IEnumerable<MyTask> GetTasksByDate(DateTime startDate, DateTime endDate)
         {
-            return _repository.GetTasksByDate(startDate, endDate);
+            return _mapper.Map<IEnumerable<MyTask>>(_repository.GetTasksByDate(startDate, endDate));
         }
-        public IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status)
+        public IEnumerable<MyTask> GetTasksByStatus(TodoStatus status)
         {
             
-            return _repository.GetTasksByStatus(status);
+            return _mapper.Map<IEnumerable<MyTask>>(_repository.GetTasksByStatus(status));
         }
 
-        public TaskDTO UpdateTask(TaskDTO task)
+        public MyTask UpdateTask(MyTask task)
         {
-            TaskDTO t = new();
+            MyTask t = new();
             t = GetTaskById(task.Id);
 
             if (task.Status != t.Status)
@@ -80,7 +86,7 @@ namespace myTodoService.Services
 
             }
 
-            return _repository.UpdateTask(task);
+            return _mapper.Map<MyTask>(_repository.UpdateTask(_mapper.Map<MyTaskDTO>(task)));
         }
 
     }

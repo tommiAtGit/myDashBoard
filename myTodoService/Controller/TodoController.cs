@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using myTodoService.Domain;
+using myTodoService.Model;
 using myTodoService.Services;
 
 
@@ -20,7 +21,7 @@ namespace myTodoService.controllers
 
         // GET: api/todo/1
         [HttpGet("{id}")]
-        public ActionResult<TaskDTO> GetTaskById(Guid id)
+        public ActionResult<MyTask> GetTaskById(Guid id)
         {
             var task = _toDoService.GetTaskById(id);
             if (task == null)
@@ -30,7 +31,7 @@ namespace myTodoService.controllers
 
         // GET: api/todo
         [HttpGet]
-        public ActionResult<IEnumerable<TaskDTO>> GetAllTasks()
+        public ActionResult<IEnumerable<MyTask>> GetAllTasks()
         {
             var tasks = _toDoService.GetAllTasks();
             if (tasks == null)
@@ -41,7 +42,7 @@ namespace myTodoService.controllers
 
         // GET: api/todo/taskByStatus
         [HttpGet("taskByStatus/{taskStatus}")]
-        public ActionResult<IEnumerable<TaskDTO>> GetTasksByStatus(int taskStatus)
+        public ActionResult<IEnumerable<MyTask>> GetTasksByStatus(int taskStatus)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -55,7 +56,7 @@ namespace myTodoService.controllers
 
         // POST: api/todo
         [HttpPost]
-        public ActionResult<TaskDTO> AddTask([FromBody] TaskDTO task)
+        public ActionResult<MyTask> AddTask([FromBody] MyTask task)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -67,7 +68,7 @@ namespace myTodoService.controllers
 
         // PUT: api/products/1
         [HttpPut("update/{id}")]
-        public ActionResult<TaskDTO> UpdateTask(Guid id, [FromBody] TaskDTO task)
+        public ActionResult<MyTask> UpdateTask(Guid id, [FromBody] MyTask task)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

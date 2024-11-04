@@ -1,6 +1,9 @@
+using AutoMapper;
 using myTodoService.Services;
+using myTodoService.Model;
 using myTodoService.Domain;
 using myTodoService.controllers;
+using myTodoService.Mapper;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 
 namespace myTodoService.Services.Tests
@@ -11,10 +14,18 @@ namespace myTodoService.Services.Tests
         private const string TASK_NAME = "Create new Task";
         private const string TASK_DESCRIPTION = "New task for testig";
         private TodoService _service;
+        private IMapper _mapper;
 
         public TodoServiceTests()
         {
-            _service = new();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>(); // Reuse your main profile
+            });
+
+            _mapper = config.CreateMapper();
+
+            _service = new(_mapper);
         }
         [Fact]
         public void AddNewTaskTest()
@@ -28,7 +39,7 @@ namespace myTodoService.Services.Tests
             // Then
             Assert.True(result.Id != Guid.Empty);
             Assert.Equal(TASK_NAME, result.Name);
-           
+
             var t = newTask.FirstOrDefault();
             if (t != null)
                 Assert.Equal(TodoStatus.OPEN, t.Status);
@@ -37,15 +48,15 @@ namespace myTodoService.Services.Tests
         public void AddNewTasks_GetbyIdTest()
         {
             // Given
-            List<TaskDTO> allTasks = [];
-            List<TaskDTO> tasks = CreateListOfOpenTasks();
-            foreach (TaskDTO t in tasks)
+            List<MyTask> allTasks = [];
+            List<MyTask> tasks = CreateListOfOpenTasks();
+            foreach (MyTask t in tasks)
             {
                 var result = _service.AddNewTask(t);
                 Assert.True(result.Id != Guid.Empty);
             }
-            allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2, _service.GetAllTasks().Count());
+            allTasks = (List<MyTask>)_service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2, _service.GetAllTasks().Count());
 
             // When
             var t0 = _service.GetTaskById(allTasks[0].Id);
@@ -65,35 +76,45 @@ namespace myTodoService.Services.Tests
 
         }
         [Fact]
-        public void GetTaskByStatusTest(){
+        public void GetTaskByStatusTest()
+        {
             // Given
-            List<TaskDTO> allTasks = [];
+            List<MyTask> allTasks = [];
 
             InitializeOpenTasks();
-            allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count);
+            allTasks = (List<MyTask>)_service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2, allTasks.Count);
             // When
             var openTasks = _service.GetTasksByStatus(TodoStatus.OPEN);
             var progressTasks = _service.GetTasksByStatus(TodoStatus.PROGRESS);
             var doneTasks = _service.GetTasksByStatus(TodoStatus.DONE);
+
+            Assert.NotNull(openTasks);
+            Assert.True(openTasks.Count() >= 1);
+            Assert.NotNull(progressTasks);
+            Assert.True(progressTasks.Count() >= 1);
+            Assert.NotNull(doneTasks);
+            Assert.True(doneTasks.Count() >= 1);
+
+
         }
         [Fact]
         public void UpdateTask_UpdateStausTest()
         {
             // Given
-            List<TaskDTO> allTasks = [];
+            List<MyTask> allTasks = [];
 
             InitializeOpenTasks();
-            allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
+            allTasks = (List<MyTask>)_service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2, allTasks.Count());
             // When
             // Status: Open -> Progress
-            TaskDTO task_progress = CopyItemOfObject(allTasks[1]);
+            MyTask task_progress = CopyItemOfObject(allTasks[1]);
             task_progress.Status = TodoStatus.PROGRESS;
             _service.UpdateTask(task_progress);
-            
+
             //Status Done -> Open
-            TaskDTO task_done = CopyItemOfObject(allTasks[8]);
+            MyTask task_done = CopyItemOfObject(allTasks[8]);
             task_done.Status = TodoStatus.OPEN;
             _service.UpdateTask(task_done);
 
@@ -103,10 +124,10 @@ namespace myTodoService.Services.Tests
             Assert.True(t1.DateReported != default);
             Assert.True(t1.Status == TodoStatus.PROGRESS);
             Assert.True(t1.DateOpened != default);
-           
+
             var t2 = _service.GetTaskById(task_done.Id);
-             Assert.NotNull(t2);
-             Assert.True(t2.DateReported != default);
+            Assert.NotNull(t2);
+            Assert.True(t2.DateReported != default);
             Assert.True(t2.Status == TodoStatus.OPEN);
             Assert.True(t2.DataCompleted != default);
 
@@ -116,30 +137,31 @@ namespace myTodoService.Services.Tests
         public void DeleteTaskTest()
         {
             // Given
-            List<TaskDTO> allTasks = [];
+            List<MyTask> allTasks = [];
 
             InitializeOpenTasks();
-            allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
+            allTasks = (List<MyTask>)_service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2, allTasks.Count());
 
             // When
             var TestTask = allTasks[7];
             _service.DeleteTask(TestTask.Id);
             // Then
-            IEnumerable<TaskDTO> d = _service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2 - 1, d.Count());
+            IEnumerable<MyTask> d = _service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2 - 1, d.Count());
         }
+
         [Fact]
         public void UpdateTask_UpdateDescription()
         {
             // Given
-            List<TaskDTO> allTasks = [];
+            List<MyTask> allTasks = [];
 
             InitializeOpenTasks();
-            allTasks = (List<TaskDTO>)_service.GetAllTasks();
-            Assert.Equal(NUMBER_OF_TASKS*2, allTasks.Count());
+            allTasks = (List<MyTask>)_service.GetAllTasks();
+            Assert.Equal(NUMBER_OF_TASKS * 2, allTasks.Count());
             // When
-            TaskDTO testTask = CopyItemOfObject(allTasks[3]);
+            MyTask testTask = CopyItemOfObject(allTasks[3]);
             testTask.Description = "Updated_by_test";
             testTask.Owner = "Updated_by_test";
             _service.UpdateTask(testTask);
@@ -150,9 +172,9 @@ namespace myTodoService.Services.Tests
             Assert.Equal(t1.Description, testTask.Description);
             Assert.Equal(t1.Owner, testTask.Owner);
         }
-        private static TaskDTO CreateNewTask()
+        private static MyTask CreateNewTask()
         {
-            TaskDTO task = new()
+            MyTask task = new()
             {
                 Name = TASK_NAME,
                 Description = TASK_DESCRIPTION,
@@ -167,16 +189,16 @@ namespace myTodoService.Services.Tests
 
         private void InitializeOpenTasks()
         {
-            List<TaskDTO> tasks = CreateListOfOpenTasks();
-            foreach (TaskDTO t in tasks)
+            List<MyTask> tasks = CreateListOfOpenTasks();
+            foreach (MyTask t in tasks)
             {
                 var result = _service.AddNewTask(t);
                 Assert.True(result.Id != Guid.Empty);
             }
         }
-        private TaskDTO CopyItemOfObject(TaskDTO copyTask)
+        private static MyTask CopyItemOfObject(MyTask copyTask)
         {
-            TaskDTO o = new()
+            MyTask o = new()
             {
                 Id = copyTask.Id,
                 Name = copyTask.Name,
@@ -192,12 +214,12 @@ namespace myTodoService.Services.Tests
             return o;
         }
 
-        private static List<TaskDTO> CreateListOfOpenTasks()
+        private static List<MyTask> CreateListOfOpenTasks()
         {
-            List<TaskDTO> taskList = [];
+            List<MyTask> taskList = [];
             for (int i = 0; i < NUMBER_OF_TASKS; i++)
             {
-                TaskDTO task = new();
+                MyTask task = new();
                 task.Name = "Create new Task_#" + i;
                 task.Description = "New task for testig_#" + i;
                 task.Reporter = "Tommi_#" + i;
