@@ -7,7 +7,7 @@ namespace myTodoService.Repository
 {
     public class TaskRepositoryMoc : ITaskRepositoryMoc
     {
-        private List<TaskDTO> _mocTasks;
+        private List<MyTaskDTO> _mocTasks;
         public TaskRepositoryMoc()
         {
             _mocTasks ??= [];
@@ -15,7 +15,7 @@ namespace myTodoService.Repository
 
         }
 
-        public TaskDTO AddNewTask(TaskDTO newTask)
+        public MyTaskDTO AddNewTask(MyTaskDTO newTask)
         {
 
             if (newTask != null)
@@ -32,19 +32,19 @@ namespace myTodoService.Repository
 
         public bool DeleteTask(Guid Id)
         {
-            TaskDTO theTask = GetTaskById(Id);
+            MyTaskDTO theTask = GetTaskById(Id);
             if (theTask != null)
                 return _mocTasks.Remove(theTask);
             else
                 throw new ArgumentNullException("NotFound", nameof(theTask));
         }
 
-        public IEnumerable<TaskDTO> GetAllTasks()
+        public IEnumerable<MyTaskDTO> GetAllTasks()
         {
             return _mocTasks;
         }
 
-        public TaskDTO GetTaskById(Guid Id)
+        public MyTaskDTO GetTaskById(Guid Id)
         {
 
             var task = _mocTasks.FirstOrDefault(p => p.Id == Id);
@@ -56,12 +56,12 @@ namespace myTodoService.Repository
 
         }
 
-        public IEnumerable<TaskDTO> GetTasksByDate(DateTime startDate, DateTime EndDate)
+        public IEnumerable<MyTaskDTO> GetTasksByDate(DateTime startDate, DateTime EndDate)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status)
+        public IEnumerable<MyTaskDTO> GetTasksByStatus(TodoStatus status)
         {
             var tasks = _mocTasks.FindAll(p => p.Status == status);
             if (tasks != null)
@@ -71,7 +71,7 @@ namespace myTodoService.Repository
 
         }
 
-        public TaskDTO UpdateTask(TaskDTO task)
+        public MyTaskDTO UpdateTask(MyTaskDTO task)
         {
             var tempTask = _mocTasks.FirstOrDefault(p => p.Id == task.Id);
             if (tempTask != null){
@@ -85,13 +85,13 @@ namespace myTodoService.Repository
 
 
         }
-        private List<TaskDTO> MockTasks(){
+        private List<MyTaskDTO> MockTasks(){
             const int NUMBER_OF_TASKS = 10;
 
-            List<TaskDTO> taskList = [];
+            List<MyTaskDTO> taskList = [];
             for (int i = 0; i < NUMBER_OF_TASKS; i++)
             {
-                TaskDTO task = new();
+                MyTaskDTO task = new();
                 task.Id = new Guid("8face6e0-fce6-40d6-b3f9-12d2d8dcaba"+i);
                 task.Name = "Create new Task_#" + i;
                 task.Description = "New task for testig_#" + i;

@@ -6,13 +6,13 @@ namespace myTodoService.Repository
 {
     public interface ITaskRepositoryMoc
     {
-        public TaskDTO AddNewTask(TaskDTO newTask);
-        public IEnumerable<TaskDTO> GetAllTasks();
-        public TaskDTO GetTaskById(Guid Id);
-        public IEnumerable<TaskDTO> GetTasksByStatus(TodoStatus status);
+        public MyTaskDTO AddNewTask(MyTaskDTO newTask);
+        public IEnumerable<MyTaskDTO> GetAllTasks();
+        public MyTaskDTO GetTaskById(Guid Id);
+        public IEnumerable<MyTaskDTO> GetTasksByStatus(TodoStatus status);
 
-        public IEnumerable<TaskDTO> GetTasksByDate(DateTime startDate, DateTime EndDate);
-        public TaskDTO UpdateTask(TaskDTO task);
+        public IEnumerable<MyTaskDTO> GetTasksByDate(DateTime startDate, DateTime EndDate);
+        public MyTaskDTO UpdateTask(MyTaskDTO task);
         public bool DeleteTask(Guid Id);
     }
 }

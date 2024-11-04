@@ -26,17 +26,17 @@ namespace myTodoService.Tests.Controllers
         public void GetAllTasks_ReturnsOkResult_WithListOfTaks()
         {
             // Given
-            List<TaskDTO> tasks = CreateListOfOpenTasks();
+            List<MyTaskDTO> tasks = CreateListOfOpenTasks();
             _mockTodoService.Setup(service => service.GetAllTasks()).Returns(tasks);
             // When
             var result = _controller.GetAllTasks();
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedTasks = Assert.IsAssignableFrom<IEnumerable<TaskDTO>>(okResult.Value);
+            var returnedTasks = Assert.IsAssignableFrom<IEnumerable<MyTaskDTO>>(okResult.Value);
             Assert.Equal(NUMBER_OF_TASKS, returnedTasks?.Count());
             const int i = 2;
-            TaskDTO? myTasks = returnedTasks?.ElementAt(i);
+            MyTaskDTO? myTasks = returnedTasks?.ElementAt(i);
             Assert.NotNull(myTasks);
             Assert.Equal(myTasks.Name, tasks[i].Name);
             Assert.Equal(myTasks.Owner, tasks[i].Owner);
@@ -50,7 +50,7 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            TaskDTO task = CreateSingleTask(id);
+            MyTaskDTO task = CreateSingleTask(id);
 
             _mockTodoService.Setup(service => service.GetTaskById(id)).Returns(task);
             // When
@@ -59,7 +59,7 @@ namespace myTodoService.Tests.Controllers
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedTask = Assert.IsType<TaskDTO>(okResult.Value);
+            var returnedTask = Assert.IsType<MyTaskDTO>(okResult.Value);
             Assert.Equal(task.Id, returnedTask.Id);
             Assert.Equal(task.Name, returnedTask.Name);
             Assert.Equal(task.Reporter, returnedTask.Reporter);
@@ -71,7 +71,7 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            TaskDTO task = CreateSingleTask(id);
+            MyTaskDTO task = CreateSingleTask(id);
 
             _mockTodoService.Setup(service => service.GetTaskById(Guid.NewGuid())).Returns(task);
             // When
@@ -87,19 +87,19 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            TaskDTO task = CreateSingleTask(id);
-            IEnumerable<TaskDTO> taskDTOs = CreateListOfOpenTasks();
+            MyTaskDTO task = CreateSingleTask(id);
+            IEnumerable<MyTaskDTO> MyTaskDTOs = CreateListOfOpenTasks();
             
-            _mockTodoService.Setup(service => service.GetTasksByStatus(TodoStatus.OPEN)).Returns(taskDTOs);
+            _mockTodoService.Setup(service => service.GetTasksByStatus(TodoStatus.OPEN)).Returns(MyTaskDTOs);
             // When
             var result = _controller.GetTasksByStatus((int)TodoStatus.OPEN);
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedTasks = Assert.IsAssignableFrom<IEnumerable<TaskDTO>>(okResult.Value);
+            var returnedTasks = Assert.IsAssignableFrom<IEnumerable<MyTaskDTO>>(okResult.Value);
             Assert.Equal(NUMBER_OF_TASKS, returnedTasks?.Count());
             const int i = 2;
-            TaskDTO? myTasks = returnedTasks?.ElementAt(i);
+            MyTaskDTO? myTasks = returnedTasks?.ElementAt(i);
             Assert.NotNull(myTasks);
             
         }
@@ -108,8 +108,8 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
              Guid id = Guid.NewGuid();
-            TaskDTO task = CreateSingleTask(id);
-            IEnumerable<TaskDTO> taskDTOs = CreateListOfOpenTasks();
+            MyTaskDTO task = CreateSingleTask(id);
+            IEnumerable<MyTaskDTO> MyTaskDTOs = CreateListOfOpenTasks();
             // When
         var result = _controller.GetTasksByStatus((int)TodoStatus.UNDEFINED);
 
@@ -121,8 +121,8 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            TaskDTO newTask = CreateSingleTask(id);
-            TaskDTO createdTask = CreateSingleTask(id);
+            MyTaskDTO newTask = CreateSingleTask(id);
+            MyTaskDTO createdTask = CreateSingleTask(id);
 
             // When
             _mockTodoService.Setup(service => service.AddNewTask(newTask)).Returns(createdTask);
@@ -131,7 +131,7 @@ namespace myTodoService.Tests.Controllers
             var result = _controller.AddTask(newTask);
             // Then
             var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-            var returnedTask = Assert.IsType<TaskDTO>(createdAtActionResult.Value);
+            var returnedTask = Assert.IsType<MyTaskDTO>(createdAtActionResult.Value);
             Assert.Equal(createdTask.Id, returnedTask.Id);
             Assert.Equal(createdTask.Name, returnedTask.Name);
             Assert.Equal(createdTask.Reporter, returnedTask.Reporter);
@@ -143,8 +143,8 @@ namespace myTodoService.Tests.Controllers
         {
             // Given
             Guid id = Guid.NewGuid();
-            TaskDTO newTask = CreateSingleTask(id);
-            TaskDTO UpdatedTask = CreateSingleTask(id);
+            MyTaskDTO newTask = CreateSingleTask(id);
+            MyTaskDTO UpdatedTask = CreateSingleTask(id);
 
             _mockTodoService.Setup(service => service.UpdateTask(newTask)).Returns(UpdatedTask);
 
@@ -153,7 +153,7 @@ namespace myTodoService.Tests.Controllers
 
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedTask = Assert.IsType<TaskDTO>(okResult.Value);
+            var returnedTask = Assert.IsType<MyTaskDTO>(okResult.Value);
             Assert.Equal(UpdatedTask.Id, returnedTask.Id);
             Assert.Equal(UpdatedTask.Name, returnedTask.Name);
             Assert.Equal(UpdatedTask.Reporter, returnedTask.Reporter);
@@ -188,10 +188,10 @@ namespace myTodoService.Tests.Controllers
             Assert.IsType<NotFoundResult>(result);
         }
 
-        private static TaskDTO CreateSingleTask(Guid id)
+        private static MyTaskDTO CreateSingleTask(Guid id)
         {
             DateTime date = DateTime.Now;
-            return new TaskDTO()
+            return new MyTaskDTO()
             {
                 Id = id,
                 Name = "Create new Task_#0",
@@ -209,12 +209,12 @@ namespace myTodoService.Tests.Controllers
 
         }
 
-        private static List<TaskDTO> CreateListOfOpenTasks()
+        private static List<MyTaskDTO> CreateListOfOpenTasks()
         {
-            List<TaskDTO> taskList = [];
+            List<MyTaskDTO> taskList = [];
             for (int i = 0; i < NUMBER_OF_TASKS; i++)
             {
-                TaskDTO task = new();
+                MyTaskDTO task = new();
                 task.Name = "Create new Task_#" + i;
                 task.Description = "New task for testig_#" + i;
                 task.Reporter = "Tommi_#" + i;
