@@ -140,7 +140,7 @@ namespace myFinanceService.Tests.Services
 
         }
         [Fact]
-        public void  UpdateBalance_UsingWithdrawalAction()
+        public void UpdateBalance_UsingWithdrawalAction()
         {
             // Given
             List<Finance> financeActions = CreateMultipleFinanceActions();
@@ -163,7 +163,7 @@ namespace myFinanceService.Tests.Services
             Assert.Equal(99.7, testBalance.AccountBalance);
 
         }
-        
+
         [Fact]
         public void UpdateBalance_WithNullOrEmpty_Account()
         {
@@ -172,12 +172,12 @@ namespace myFinanceService.Tests.Services
             // When
             Finance finance = new();
             var ex1 = Assert.Throws<ArgumentException>(() => _balanceService.UpdateBalance("", finance));
-           
+
             var ex2 = Assert.Throws<ArgumentException>(() => _balanceService.UpdateBalance(null, finance));
-            
+
             // Then
-             Assert.Equal("Applied account was null or empty. (Parameter 'account')", ex1.Message);
-            
+            Assert.Equal("Applied account was null or empty. (Parameter 'account')", ex1.Message);
+
 
 
         }
@@ -185,7 +185,7 @@ namespace myFinanceService.Tests.Services
         public void DeleteBalanceTest_ReturnBalance_Found()
         {
             // Given
-     
+
             List<Finance> financeActions = CreateMultipleFinanceActions();
             foreach (Finance f in financeActions)
             {
@@ -193,16 +193,16 @@ namespace myFinanceService.Tests.Services
                 Assert.NotNull(b);
             }
             IEnumerable<Balance> fa = _balanceService.GetAllBalances();
-                Balance balance = fa.ElementAt(2);
+            Balance balance = fa.ElementAt(2);
 
-                Guid balanceId = balance.Id;
+            Guid balanceId = balance.Id;
             // When
-               bool result =  _balanceService.DeleteBalance(balanceId);
+            bool result = _balanceService.DeleteBalance(balanceId);
 
 
             // Then
             Assert.True(result);
-           
+
         }
         private static Finance CreateNewMocDepositTransaction()
         {

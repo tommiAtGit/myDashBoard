@@ -6,7 +6,7 @@ namespace myFinanceService.Services
     {
 
         public IEnumerable<Budget> GetAllBudgets();
-        public Budget GetBudgetByAccount(string account);
+        public IEnumerable<Budget> GetBudgetByAccount(string account);
         public Budget UpdateAccountBudget(Guid id, Budget budget);
         public Budget GetBudgetById(Guid id);
         public Budget AddBudget(Budget newBudget);

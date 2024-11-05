@@ -20,7 +20,6 @@ namespace myFinanceService.controllers
 
         public BudgetControllerTest()
         {
-
             _mockService = new Mock<IBudgetService>();
             _controller = new BudgetController(_mockService.Object);
             utils = new();
@@ -43,25 +42,74 @@ namespace myFinanceService.controllers
         }
 
         [Fact]
+        public void GetBudgetByIdTest()
+        {
+            // Given
+            var budgets = utils.CreateBudgetWithDifferentAccount();
+            Guid id = budgets.First().Id;
+            _mockService.Setup(service => service.GetBudgetById(id)).Returns(budgets.First());
+
+            // When
+            var result = _controller.GetBudgetById(id);
+
+            // Then
+            var okResult = Assert.IsType<OkObjectResult>(result.Result);
+            var returnedBudget = Assert.IsAssignableFrom<Budget>(okResult.Value);
+            
+            Assert.Equal(budgets.First().BudgetAccount, returnedBudget.BudgetAccount);
+
+
+        }
+
+        [Fact]
+        public void GetBudgetById_EmptyId()
+        {
+             // Given
+            var budgets = utils.CreateBudgetWithDifferentAccount();
+            Guid id = budgets.First().Id;
+            _mockService.Setup(service => service.GetBudgetById(id)).Returns(budgets.First());
+
+            // When
+            var result = _controller.GetBudgetById(Guid.Empty);
+
+            // Then
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public void GetBudgetById_NotFound()
+        {
+             // Given
+            var budgets = utils.CreateBudgetWithDifferentAccount();
+            Guid id = budgets.First().Id;
+            Budget? budget = null;
+            _mockService.Setup(service => service.GetBudgetById(id)).Returns(budget);
+
+            // When
+            var result = _controller.GetBudgetById(id);
+
+            // Then
+           Assert.IsType<NotFoundResult>(result.Result);
+        }
+
+        [Fact]
         public void GetBudgetByAccount_ReturnOkAndBudgetObject()
         {
             // Given
-            var budget = utils.CreateBudget();
+            var budget = utils.CreateBudgetWithDifferentAccount();
             _mockService.Setup(service => service.GetBudgetByAccount(utils.GetFirstAccount())).Returns(budget);
             // When
             var result = _controller.GetBudgetByAccount(utils.GetFirstAccount());
             // Then
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnedBudget = Assert.IsAssignableFrom<Budget>(okResult.Value);
-            Assert.Equal(utils.GetFirstAccount(), returnedBudget.BudgetAccount);
-            Assert.Equal(budget.BudgetAccount, returnedBudget.BudgetAccount);
-            Assert.Equal(budget.BudgetValue, returnedBudget.BudgetValue);
+            var returnedBudget = Assert.IsAssignableFrom<List<Budget>>(okResult.Value);
+            Assert.Equal(utils.GetFirstAccount(), returnedBudget.First().BudgetAccount);
         }
 
         [Fact]
         public void GetBudgetByAccount_ReturnedNotFound()
         {
-            var budget = utils.CreateBudget();
+            var budget = utils.CreateBudgetWithDifferentAccount();
             _mockService.Setup(service => service.GetBudgetByAccount(utils.GetFirstAccount())).Returns(budget);
             // When
             var result = _controller.GetBudgetByAccount(utils.GetSecondAccount());
