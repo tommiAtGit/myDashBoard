@@ -41,7 +41,7 @@ namespace myFinanceService.controllers{
                 return BadRequest(ModelState);
              }
             var budget =  _service.GetBudgetByAccount(account);
-            if(budget == null)
+            if((budget == null)||(budget.Count()<1))
                 return NotFound();
             return Ok(budget);
 

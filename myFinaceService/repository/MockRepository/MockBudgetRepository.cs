@@ -16,10 +16,11 @@ namespace myFinanceService.Repository
 
 
         }
-         public IEnumerable<BudgetDTO>GetAllBudgets(){
+        public IEnumerable<BudgetDTO> GetAllBudgets()
+        {
             return _repository;
-         }
-         
+        }
+
         public BudgetDTO AddBudget(BudgetDTO newBudget)
         {
             if (newBudget == null)
@@ -31,8 +32,17 @@ namespace myFinanceService.Repository
 
         public bool DeleteBudget(Guid Id)
         {
-            BudgetDTO dto = GetBudgetById(Id);
-            return _repository.Remove(dto);
+            BudgetDTO? dto = null;
+            try
+            {
+                dto = GetBudgetById(Id);
+                return _repository.Remove(dto);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         public IEnumerable<BudgetDTO> GetBudgetByAccount(string account)

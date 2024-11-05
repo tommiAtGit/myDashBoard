@@ -36,12 +36,12 @@ namespace myFinanceService.Services
            return _repository.DeleteBudget(id);
         }
 
-        public Budget GetBudgetByAccount(string account)
+        public IEnumerable<Budget> GetBudgetByAccount(string account)
         {
            if((account == null)||(account==""))
             throw new ArgumentException(nameof(account), "Applied account was null or empty");
 
-            return _mapper.Map<Budget>(_repository.GetBudgetByAccount(account));
+            return _mapper.Map<IEnumerable<Budget>>(_repository.GetBudgetByAccount(account));
         }
 
         public Budget GetBudgetById(Guid id)
@@ -60,5 +60,7 @@ namespace myFinanceService.Services
 
              return _mapper.Map<Budget>(_repository.UpdateBudget(id, _mapper.Map<BudgetDTO>(budget)));
         }
+
+       
     }
 }
