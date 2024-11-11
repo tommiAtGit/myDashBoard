@@ -19,7 +19,7 @@ namespace myNotesService.Controllers
         public ActionResult<IEnumerable<GeneralNotes>> GetAllGeneralNotes()
         {
             var allNotes = _service.GetAllGeneralNotes();
-            if (allNotes == null)
+            if ((allNotes == null)||(allNotes.Count()<1))
                 return NotFound();
 
             return Ok(allNotes);
@@ -38,7 +38,7 @@ namespace myNotesService.Controllers
             }
             return Ok(notes);
         }
-        [HttpPost]
+        [HttpPost("/keywords")]
         public ActionResult<IEnumerable<GeneralNotes>> GetNotesByKeyWord([FromBody] List<string> keywords)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,18 +51,18 @@ namespace myNotesService.Controllers
 
 
         }
-        [HttpPost]
-        public ActionResult<GeneralNotes> GetGeneralNotesByOwner([FromBody] string owner)
+        [HttpPost("/owner")]
+        public ActionResult<IEnumerable<GeneralNotes>> GetGeneralNotesByOwner([FromBody] string owner)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             if ((owner == null) || (owner == ""))
-                return NotFound();
+                return  BadRequest(ModelState);
             var notes = _service.GetGeneralNotesByOwner(owner);
-            if (notes == null)
+            if (notes == null|| notes.Count()<1)
                 return NotFound();
             return Ok(notes);
         }
-        [HttpPost]
+        [HttpPost("/dateCreated")]
         public ActionResult<GeneralNotes> GetNotestByDateCreated([FromBody] DateTime dateCreated)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -83,7 +83,7 @@ namespace myNotesService.Controllers
             var updateNotes = _service.UpdateGeneralNotes(id,notes);
             if (updateNotes == null)
                 return NotFound();
-            return updateNotes;
+            return Ok(updateNotes);
 
         }
         [HttpDelete("{id}")]

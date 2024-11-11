@@ -47,7 +47,8 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
 
     public IEnumerable<GeneralNotesDTO> GetGeneralNotesByDateCreated(DateTime dateCreated)
     {
-        var notes = _genNotes.FindAll(p => p.DateCreatad == dateCreated);
+        var notes = _genNotes.FindAll(p => p.DateCreatad.Date == dateCreated.Date);
+        
         if (notes != null)
             return notes;
         else
@@ -61,7 +62,7 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
         if (notes != null)
             return notes;
         else
-            throw new ArgumentNullException("NotFound", nameof(notes));
+            return new GeneralNotesDTO();
 
     }
 
@@ -69,16 +70,15 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
     {
         IEnumerable<GeneralNotesDTO> keyWordNotes = [];
         var notes = GetAllGeneralNotes();
-        foreach (var o in notes)
+        foreach (GeneralNotesDTO o in notes)
         {
-            foreach (string keyWord in o.KeyWords)
+            foreach (string keyWord in keyWords)
             {
                 if (o.KeyWords.Contains(keyWord))
                 {
-                    keyWordNotes.Append(o);
+                    keyWordNotes = keyWordNotes.Append(o);
                 }
             }
-
         }
         return keyWordNotes;
     }
@@ -104,6 +104,11 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
         return notes;
 
         
+
+    }
+
+    private void GenerateMockGeneralNotes(){
+
 
     }
 

@@ -55,14 +55,14 @@ namespace myNotesService.Services
         public GeneralNotes GetGeneralNotesById(Guid id)
         {
             if (id == Guid.Empty)
-                throw new ArgumentNullException(nameof(id), "No document defined");
+                return new GeneralNotes();
             return _mapper.Map<GeneralNotes>(_repository.GetGeneralNotesById(id));
         }
 
         public IEnumerable<GeneralNotes> GetGeneralNotesByKeyWords(List<string> keyWords)
         {
             if (keyWords.Count < 1)
-                throw new ArgumentNullException(nameof(keyWords), "No keywords defined");
+                return[];
 
             return _mapper.Map<IEnumerable<GeneralNotes>>(_repository.GetGeneralNotesByKeyWords(keyWords));
         }
@@ -70,8 +70,7 @@ namespace myNotesService.Services
         public IEnumerable<GeneralNotes> GetGeneralNotesByOwner(string owner)
         {
             if ((owner == null) || owner == "")
-                throw new ArgumentNullException(nameof(owner), "No owner defined");
-
+                return [];
             return _mapper.Map<IEnumerable<GeneralNotes>>(_repository.GetGeneralNotesByOwner(owner));
 
         }
@@ -79,6 +78,16 @@ namespace myNotesService.Services
         public GeneralNotes UpdateGeneralNotes(Guid id, GeneralNotes notes)
         {
             var genNotes = _repository.GetGeneralNotesById(id);
+            if(genNotes.id==Guid.Empty)
+                return new GeneralNotes();
+            genNotes.DateCreatad = notes.DateCreatad;
+            genNotes.DateModifyed = notes.DateModifyed;
+            genNotes.KeyWords = notes.KeyWords;
+            genNotes.ModifiedBy = notes.ModifiedBy;
+            genNotes.Notes = notes.Notes;
+            genNotes.NotesConclution = notes.NotesConclution;
+            genNotes.NotesTiltle = notes.NotesTiltle;
+            genNotes.Owner = notes.Owner;
             return _mapper.Map<GeneralNotes>(_repository.UpdateGeneralNotes(id, genNotes));
         }
     }

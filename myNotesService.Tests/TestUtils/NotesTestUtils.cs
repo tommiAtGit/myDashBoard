@@ -1,3 +1,5 @@
+using AutoMapper;
+using myNotesService.Domain;
 using myNotesService.Model;
 
 namespace myNotesService.TestUtils
@@ -6,10 +8,11 @@ namespace myNotesService.TestUtils
     {
         public static int NUMBER_OF_NOTES = 8;
 
-        public int GetNumberOfNotes(){
+        public int GetNumberOfNotes()
+        {
             return NUMBER_OF_NOTES;
         }
-        public GeneralNotes CreateGeneralNotes()
+        public static GeneralNotes CreateGeneralNotes()
         {
 
             return new GeneralNotes()
@@ -29,32 +32,38 @@ namespace myNotesService.TestUtils
 
             };
         }
-        public IEnumerable<GeneralNotes> CreateMultipleGeneralNotes()
+        public static GeneralNotesDTO CreateGeneralNotesDTO(IMapper mapper){
+            return mapper.Map<GeneralNotesDTO>(CreateGeneralNotes());
+        }
+
+        public static List<GeneralNotes> CreateMultipleGeneralNotes()
         {
-            IEnumerable<GeneralNotes> testNotes = [];
+            List<GeneralNotes> testNotes = [];
 
             for (int i = 0; i < NUMBER_OF_NOTES; i++)
             {
                 GeneralNotes notes = new()
                 {
                     id = Guid.NewGuid(),
-                    DateCreatad = DateTime.Now.AddDays(-2-i),
-                    ModifiedBy = "Tommi_#"+i,
-                    DateModifyed = DateTime.Now,
+                    DateCreatad = DateTime.Now.AddDays(-2 - i),
+                    ModifiedBy = "Tommi_#" + i,
+                    DateModifyed = DateTime.Now.AddDays(i*(-1)),
 
-                    Owner = "Owner Tommi_#"+i,
-                    NotesTiltle = "Document test title_#"+i,
-                    Notes = "Test Notes content_#"+i,
-                    NotesConclution = "Test Notes conclution_#"+i,
+                    Owner = "Owner Tommi_#" + i,
+                    NotesTiltle = "Document test title_#" + i,
+                    Notes = "Test Notes content_#" + i,
+                    NotesConclution = "Test Notes conclution_#" + i,
 
-                    KeyWords = ["Tommi_#"+i, "Test_#"+i, "Notes_#"+i]
+                    KeyWords = ["Tommi_#" + i+".1", "Test_#" + i+".2", "Notes_#" + i+".3"]
                 };
-                testNotes.Append(notes);
-
-
+                testNotes.Add(notes);
             }
             return testNotes;
         }
+        public static List<GeneralNotesDTO>CreateMultibleGeneralNotesDTO(IMapper mapper){
+            return mapper.Map<List<GeneralNotesDTO>> (CreateMultipleGeneralNotes());
+        }
+
     }
 }
 
