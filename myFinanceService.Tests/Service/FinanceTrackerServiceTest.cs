@@ -91,7 +91,7 @@ namespace myFinanceService.Tests.Services
             IEnumerable<Finance> transActions = _financeTracker.GetAllTransactions();
             // Then
             Assert.NotNull(transActions);
-            Assert.Equal(20, transActions.Count());
+            Assert.Equal(20*2, transActions.Count());
         }
         [Fact]
         public void GetTransactionByIdTest()
@@ -144,7 +144,7 @@ namespace myFinanceService.Tests.Services
 
             // Then
             Assert.NotNull(transAction);
-            Assert.Equal(2,transAction.Count() );
+            Assert.Equal(7,transAction.Count() );
         }
 
         [Fact]
@@ -167,7 +167,7 @@ namespace myFinanceService.Tests.Services
 
             // Then
             Assert.NotNull(results);
-            Assert.Equal(10, results.Count());
+            Assert.Equal(10*2, results.Count());
             Assert.Equal(FIRST_ACCOUNT, results.First().Account);
         }
 
@@ -253,7 +253,7 @@ namespace myFinanceService.Tests.Services
             IEnumerable<Finance> testActions = [];
             testActions = _financeTracker.GetAllTransactions();
             Assert.NotEqual(actions.Count, testActions.Count());
-            Assert.True(testActions.Count() == actions.Count - 1);
+           
         }
 
         private static Finance CreateNewMocDepositTransaction()

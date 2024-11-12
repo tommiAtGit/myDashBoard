@@ -84,12 +84,18 @@ namespace myFinanceService.Tests.Controllers
         {
             // Given
             List<Finance> finances = testUtils.CreateNewMocTransactionsWithDifferentAccount();
-            string startDate = DateTime.Now.AddDays(-3).ToString();
-            string endDate = DateTime.Now.AddDays(-1).ToString();
+           
+            FinanceDate theDate = new(){
+                //startDate = DateTime.Now.AddDays(-3).ToString(),
+                //endDate = DateTime.Now.AddDays(-1).ToString()
+                 startDate = "2024-11-02",
+                endDate =  "2024-11-06"
 
-            _mockService.Setup(service => service.GetTransactionsByDate(startDate, endDate)).Returns(finances);
+            };
+
+            _mockService.Setup(service => service.GetTransactionsByDate(theDate.startDate, theDate.endDate)).Returns(finances);
             // When
-            var results = _controller.GetTransactionByDate(startDate, endDate);
+            var results = _controller.GetTransactionByDate(theDate);
             // Then
             var okResult = Assert.IsType<OkObjectResult>(results.Result);
             var returnedFinanceAction = Assert.IsAssignableFrom<IEnumerable<Finance>>(okResult.Value);
@@ -104,9 +110,10 @@ namespace myFinanceService.Tests.Controllers
             string startDate = DateTime.Now.AddDays(-3).ToString();
             string endDate = DateTime.Now.AddDays(-1).ToString();
 
+
             _mockService.Setup(service => service.GetTransactionsByDate(startDate, endDate)).Returns(finances);
             // When
-            var results = _controller.GetTransactionByDate("startDate", "endDate");
+            var results = _controller.GetTransactionByDate(new());
             // Then
             Assert.IsType<NotFoundResult>(results.Result);
         }
@@ -193,10 +200,7 @@ namespace myFinanceService.Tests.Controllers
             // Then
             Assert.IsType<NotFoundResult>(result);
 
-
         }
      
-       
-
     }
 }
