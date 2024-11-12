@@ -32,7 +32,7 @@ namespace myFinanceService.controllers
         {
 
             var financeAction = _service.GetTransactionById(Id);
-            if (financeAction.Id == Guid.Empty) return NotFound();
+            if (financeAction == default) return NotFound();
             return Ok(financeAction);
         }
         // GET: api/financetracker/transactionByDate

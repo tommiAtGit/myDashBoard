@@ -140,11 +140,11 @@ namespace myFinanceService.Tests.Services
             }
 
             // When
-             var transAction = _financeTracker.GetTransactionsByDate(DateAndTime.Now.ToString(), DateTime.Now.AddDays(-2).ToString());
+             var transAction = _financeTracker.GetTransactionsByDate(DateAndTime.Now.AddDays(-7).ToString(), DateTime.Now.AddDays(-1).ToString());
 
             // Then
             Assert.NotNull(transAction);
-            Assert.Equal(7,transAction.Count() );
+            Assert.Equal(8,transAction.Count() );
         }
 
         [Fact]
