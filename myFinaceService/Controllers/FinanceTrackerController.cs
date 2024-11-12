@@ -14,6 +14,7 @@ namespace myFinanceService.controllers
 
         private IFinanceTrackerService _service;
 
+        //GET: api/financetracker/
         public FinanceTrackerController(IFinanceTrackerService financeTrackerService)
         {
             _service = financeTrackerService;
@@ -25,22 +26,26 @@ namespace myFinanceService.controllers
             var financeActions = _service.GetAllTransactions();
             return Ok(financeActions);
         }
-
+        // GET: api/financetracker/1
         [HttpGet("{id}")]
         public ActionResult<Finance> GetTransaction(Guid Id)
         {
 
             var financeAction = _service.GetTransactionById(Id);
-            if (financeAction == null) return NotFound();
+            if (financeAction == default) return NotFound();
             return Ok(financeAction);
         }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<Finance>> GetTransactionByDate([FromBody] String startDate, [FromBody] String endDate)
+        // GET: api/financetracker/transactionByDate
+        [HttpPost("transactionByDate")]
+        public ActionResult<IEnumerable<Finance>> GetTransactionByDate([FromBody] FinanceDate financeDate)
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var financeAction = _service.GetTransactionsByDate(startDate, endDate);
+
+
+            if ((financeDate.startDate == "") || (financeDate.endDate == ""))
+                return NotFound();
+            var financeAction = _service.GetTransactionsByDate(financeDate.startDate, financeDate.endDate);
             if ((financeAction == null) || (financeAction.Count() < 1))
                 return NotFound();
             return Ok(financeAction);
@@ -60,6 +65,7 @@ namespace myFinanceService.controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var fianceAction = _service.UpdateTransaction(id, transAction);
             if (fianceAction == null) return NotFound();
+            if (fianceAction.Id == Guid.Empty) return NotFound();
             return Ok(fianceAction);
         }
 

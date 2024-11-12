@@ -33,40 +33,50 @@ namespace myFinanceService.TestUtils
             for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++)
             {
 
-                Finance dto = new Finance();
-                dto.Id = Guid.NewGuid();
-                dto.Type = ActionType.WITHDRAWAL;
-                dto.Account = FIRST_ACCOUNT;
-                dto.Description = "Save to my Account_action#" + i + ".0";
-                dto.Amount = 3 * i;
-                dto.ActionDate = DateTime.Now;
+                Finance dto = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Type = ActionType.WITHDRAWAL,
+                    Account = FIRST_ACCOUNT,
+                    Description = "Save to my Account_action#" + i + ".0",
+                    Amount = 3 * i,
+                    ActionDate = DateTime.Now
+                };
                 transactions.Add(dto);
 
-                Finance dto_a = new Finance();
-                dto.Id = Guid.NewGuid();
-                dto_a.Type = ActionType.DEPOSIT;
-                dto_a.Account = FIRST_ACCOUNT;
-                dto_a.Description = "Save to my Account_action#" + i + ".1";
-                dto_a.Amount = 10 * i;
-                dto_a.ActionDate = DateTime.Now;
+                Finance dto_a = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Type = ActionType.DEPOSIT,
+                    Account = FIRST_ACCOUNT,
+                    Description = "Save to my Account_action#" + i + ".1",
+                    Amount = 10 * i,
+                    ActionDate = DateTime.Now
+                };
                 transactions.Add(dto_a);
 
-                Finance dto_b = new Finance();
-                dto.Id = Guid.NewGuid();
-                dto_b.Type = ActionType.WITHDRAWAL;
-                dto_b.Account = SECOND_ACCOUNT;
-                dto_b.Description = "Save to my Account_action#" + i + ".2";
-                dto_b.Amount = 3 * i;
-                dto_b.ActionDate = DateTime.Now;
+
+                Finance dto_b = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Type = ActionType.WITHDRAWAL,
+                    Account = SECOND_ACCOUNT,
+                    Description = "Save to my Account_action#" + i + ".2",
+                    Amount = 3 * i,
+                    ActionDate = DateTime.Now,
+                };
                 transactions.Add(dto_b);
 
-                Finance dto_c = new Finance();
-                dto.Id = Guid.NewGuid();
-                dto_c.Type = ActionType.DEPOSIT;
-                dto_c.Account = SECOND_ACCOUNT;
-                dto_c.Description = "Save to my Account_action#" + i + ".3";
-                dto_c.Amount = 10 * i;
-                dto_c.ActionDate = DateTime.Now;
+                Finance dto_c = new()
+                {
+                    Id = Guid.NewGuid(),
+                    Type = ActionType.DEPOSIT,
+                    Account = SECOND_ACCOUNT,
+                    Description = "Save to my Account_action#" + i + ".3",
+                    Amount = 10 * i,
+                    ActionDate = DateTime.Now
+                };
+
                 transactions.Add(dto_c);
 
             }
