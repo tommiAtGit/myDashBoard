@@ -1,3 +1,8 @@
+* {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .App {
   text-align: center;
 }
@@ -28,11 +33,81 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.column-a, .column-b, .column-c {
+  float: left;
+  width: 33%;
+  padding: 1px;
+  height: 500px; /* Should be removed. Only for demonstration */
+  margin-left: -85px;
 }
+.column-a{
+  background-color:#aaa;
+}
+.column-b{
+  background-color:#bbb;
+}
+.column-c{
+  background-color:#ccc;
+}
+
+.header-row{
+  text-align: center;
+  margin-top: -21px;
+  margin-left: -1px;
+  margin-right: -1px;
+  background-color:#bbb;
+  
+}
+
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.card{
+  display: table;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 100%;
+  background-color:#ccc ;
+  margin-top: 6px;
+  margin-left: 1px;
+  margin-right: -50px;
+
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.container {
+  padding: 2px 16px;
+}
+
+.title-container{
+  font-size: medium;
+  float:left;
+  width:50%;
+  text-align:left;
+}
+.date-container{
+  font-size: smaller;
+   float:right;
+   width:50%;
+   text-align:right;
+
+}
+.clear-container{
+  clear:both;
+}
+
+.content-row{
+  margin-top: -10px;
+  font-size: small;
+
+
+}
+
+
