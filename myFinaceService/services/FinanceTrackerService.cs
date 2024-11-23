@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using myFinanceService.Domain;
 using myFinanceService.Model;
 using myFinanceService.Repository;
@@ -32,7 +33,11 @@ namespace myFinanceService.Services
 
         public Finance GetTransactionById(Guid id)
         {
-            return _mapper.Map<Finance>(_repository.GetTransactionById(id));
+            var finance = _repository.GetTransactionById(id);
+            if(finance.Id == Guid.Empty)
+                return new Finance();
+            else
+                return _mapper.Map<Finance>(finance);
         }
 
         public IEnumerable<Finance> GetTransactionsByDate(string startDate, string endDate)
@@ -50,6 +55,10 @@ namespace myFinanceService.Services
         public Finance UpdateTransaction(Guid Id, Finance newTransaction)
         {
             var updatedAction = _repository.UpdateTransaction(Id, _mapper.Map<FinanceDTO>(newTransaction));
+            if(updatedAction.Id == Guid.Empty){
+             return new Finance();
+            }
+
             return _mapper.Map<Finance>(updatedAction);
         }
         public bool DeleteTransaction(Guid Id)
