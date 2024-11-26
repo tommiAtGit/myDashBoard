@@ -6,8 +6,6 @@ import { FaTrash } from "react-icons/fa";
 import './../App.css';
 
 const TodoView = () => {
-    const [text1, setText1] = useState('');
-    const [text2, setText2] = useState('');
 
     return (
         <div>
@@ -46,14 +44,20 @@ const TodoView = () => {
                     <div class="card">
                         <div class="container">
                             <div class="title-container">
-                                <b>Some Other Title</b>
+                                <b>Some Title</b>
                             </div>
                             <div class="date-container">
                                 dd.mm.yyyy
                             </div>
                             <div class="clear-container"></div>
-                            <div class="content-row" >
-                                <p>Some other content</p>
+                            <div class="split-content-container">
+                            <div class="content-container">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada at lacus et tincidunt. Nunc facilisis laoreet odio ut vestibulum.
+                            </div>
+                            <div class="action-container">
+                                <FaPen/>
+                                <FaTrash/>
+                            </div>
                             </div>
                         </div>
                     </div>
