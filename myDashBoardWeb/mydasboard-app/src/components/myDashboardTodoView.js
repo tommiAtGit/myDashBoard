@@ -1,11 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+import Card from "./myDashBoardCardView";
 
-import { FaPen } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa";
 
 import './../App.css';
 
 const TodoView = () => {
+
+    const [openCards, setOpenCards] = useState([]);
+    const [inProgressCards, setInProgressCards] = useState([]);
+    const [doneCards, setDoneCards] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchOpenCards = async () => {
+            try {
+                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/1");
+                setOpenCards(response.data);
+                setLoading(false);
+
+            }
+            catch (err) {
+                setError("Failed to load cards");
+                setLoading(false);
+
+            }
+        };
+        const fetchInProgressCards = async () => {
+            try {
+                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/2");
+                setInProgressCards(response.data);
+                setLoading(false);
+
+            }
+            catch (err) {
+                setError("Failed to load cards");
+                setLoading(false);
+
+            }
+        };
+        const fetchDoneCards = async () => {
+            try {
+                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/3");
+                setDoneCards(response.data);
+                setLoading(false);
+
+            }
+            catch (err) {
+                setError("Failed to load cards");
+                setLoading(false);
+
+            }
+        };
+
+        fetchOpenCards();
+        fetchInProgressCards();
+        fetchDoneCards();
+    }, []);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <div>
@@ -18,59 +73,48 @@ const TodoView = () => {
             <div class="row">
                 <div class="column-a">
                     <div class="header-row">
-                        <h2>Column 1</h2>
+                        <h2>Open tasks</h2>
                     </div>
-                    <div class="card">
-                        <div class="container">
-                            <div class="title-container">
-                                <b>Some Title</b>
-                            </div>
-                            <div class="date-container">
-                                dd.mm.yyyy
-                            </div>
-                            <div class="clear-container"></div>
-                            <div class="split-content-container">
-                            <div class="content-container">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada at lacus et tincidunt. Nunc facilisis laoreet odio ut vestibulum.
-                            </div>
-                            <div class="action-container">
-                                <FaPen/>
-                                <FaTrash/>
-                            </div>
-                            </div>
-                        </div>
+                    <div class="card-list">
+                        {openCards.map((card, index) => (
+                            <Card
+                                key={card.id}
+                                name={card.name}
+                                dateReported={card.dateReported}
+                                description={card.description}
+                            />
+                        ))}
                     </div>
-
-                    <div class="card">
-                        <div class="container">
-                            <div class="title-container">
-                                <b>Some Title</b>
-                            </div>
-                            <div class="date-container">
-                                dd.mm.yyyy
-                            </div>
-                            <div class="clear-container"></div>
-                            <div class="split-content-container">
-                            <div class="content-container">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi malesuada at lacus et tincidunt. Nunc facilisis laoreet odio ut vestibulum.
-                            </div>
-                            <div class="action-container">
-                                <FaPen/>
-                                <FaTrash/>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-
-
                 </div>
                 <div class="column-b">
-                    <h2>Column 2</h2>
-                    <p>Some text..</p>
+                    <div class="header-row">
+                        <h2>Inprogress tasks</h2>
+                    </div>
+                    <div class="card-list">
+                        {inProgressCards.map((card, index) => (
+                            <Card
+                                key={card.id}
+                                name={card.name}
+                                dateReported={card.dateReported}
+                                description={card.description}
+                            />
+                        ))}
+                    </div>
                 </div>
                 <div class="column-c">
-                    <h2>Column 3</h2>
-                    <p>Some text..</p>
+                    <div class="header-row">
+                        <h2>Done tasks</h2>
+                    </div>
+                    <div class="card-list">
+                        {doneCards.map((card, index) => (
+                            <Card
+                                key={card.id}
+                                name={card.name}
+                                dateReported={card.dateReported}
+                                description={card.description}
+                            />
+                        ))}
+                    </div>
                 </div>
 
             </div>
