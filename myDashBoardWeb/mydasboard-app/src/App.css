@@ -185,23 +185,27 @@
   position: 'fixed';
   height: '100vh';
 }
-ul{
+.side-menu ul{
   width: auto;
   list-style: none;
   padding: 0;
 }
-ul svg{
+.side-menu ul svg{
   width: 20px;
   height: auto;
 
 }
-a{
+.side-menu a{
   margin-left: 10px;
   margin-right: auto;
   
 }
 
-li{
+.side-menu li{
 font-size: 20px;
 align-items:center;
 }
+.side-menu li:hover{
+  font-size: 22px;
+  opacity: 0.9;
+  }
