@@ -65,10 +65,10 @@ const TodoView = () => {
     return (
         <div>
             <h2>Todo</h2>
-            <div class="add-new">
+            <div class="button-container">
                 <button class="add-new-button">
                     Add New Task
-                </button>
+                </button> 
             </div>
             <div class="row">
                 <div class="column-a">
