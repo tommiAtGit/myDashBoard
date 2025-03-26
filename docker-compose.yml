@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # First: myTodoService
+  myTodoService:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myTodoService
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MySqlConnectionString=Server=mysql;Database=mydb;User=root;Password=mysecretpassword;
+    ports:
+      - "5001:80"
+    depends_on:
+      - mysql
+    networks:
+      - mynetwork
+
+  # Second: myFinanceService .NET API container
+  myFinancesService:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myFinancesService
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MySqlConnectionString=Server=mysql;Database=mydb;User=root;Password=mysecretpassword;
+    ports:
+      - "5002:80"
+    depends_on:
+      - mysql
+    networks:
+      - mynetwork
+
+  # Third: myNotesService .NET API container
+  myNotesService:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myNotesService
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MySqlConnectionString=Server=mysql;Database=mydb;User=root;Password=mysecretpassword;
+    ports:
+      - "5003:80"
+    depends_on:
+      - mysql
+    networks:
+      - mynetwork
+
+  
+
+  # MySQL container
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+      MYSQL_DATABASE: mydb
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
