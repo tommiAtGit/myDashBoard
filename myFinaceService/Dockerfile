@@ -1,23 +1,31 @@
 # Use the official .NET SDK image for building the application
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /myFinaceService
+WORKDIR /app
 EXPOSE 80
 
 # Use the SDK image for building the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["myFinaceService/myFinaceService.csproj", "myFinaceService/"]
-RUN dotnet restore "myFinaceService/myFinaceService.csproj"
-COPY . .
-WORKDIR "/src/myFinaceService"
+
+# Copy the .csproj file and restore dependencies
+# Copy the csproj file into /src directory in the container
+COPY myFinaceService.csproj ./  
+RUN dotnet restore "myFinaceService.csproj"
+
+# Copy the remaining files (including Program.cs and all other files) into the container
+# This will copy everything from your local directory to /src in the container
+COPY . .  
+WORKDIR "/src"
 RUN dotnet build "myFinaceService.csproj" -c Release -o /app/build
 
+# Publish the app
 FROM build AS publish
 RUN dotnet publish "myFinaceService.csproj" -c Release -o /app/publish
 
-
 # Final stage to create the runtime container
+# Copy the published files to /app in the container
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "myFinaceService.dll"]
+COPY --from=publish /app/publish .  
+# Run the app when the container starts
+ENTRYPOINT ["dotnet", "myFinaceService.dll"]  
