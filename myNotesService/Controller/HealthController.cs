@@ -17,7 +17,7 @@ namespace myNotesService.Controllers
         public IActionResult Get()
         {
             var message = _myService.getMessage();
-            return Ok(new { status = "Healthy", service = "Microservice 1" });
+            return Ok(new { status = "I'm alive "+ message, service = "myNotesService " });
         }
     }
 }

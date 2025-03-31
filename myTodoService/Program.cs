@@ -13,9 +13,13 @@ builder.Services.AddSwaggerGen();
 // Register AutoMapper with DI
 builder.Services.AddAutoMapper(typeof(MappingProfile)); 
 
+builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 // Register custom services
 builder.Services.AddScoped<IMyHealthService, MyHealthService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
+
+
 
 builder.Services.AddCors(options =>
 {
@@ -38,9 +42,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseHttpsRedirection();
+
+
+//app.UseAuthorization();
 
 app.MapControllers();
 
