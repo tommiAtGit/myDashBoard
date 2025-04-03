@@ -34,38 +34,80 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
     const handleCancel = () => {
         onClose();
     }
-    if (!isOpen) return null;   
+    if (!isOpen) return null;
     return (
         <div className="modal-overlay">
-          <div className="modal-container">
-            <h2 className="modal-title">Add New Task</h2>
-            
-            {/* Title Input */}
-            <input
-              type="text"
-              placeholder="Enter task title"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              className="modal-input"
-            />
-            
-            {/* Description Input */}
-            <input
-              type="text"
-              placeholder="Enter task description"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              className="modal-input"
-            />
-            
-            {/* Buttons */}
-            <div className="modal-buttons">
-              <button onClick={onClose} className="modal-cancel">Cancel</button>
-              <button onClick={() => onSave({ taskName, taskDescription })} className="modal-save">Save</button>
+            <div className="modal-container">
+                <h2 className="modal-title">Add New Task</h2>
+
+                {/* Title Input */}
+                <input
+                    type="text"
+                    placeholder="Enter task title"
+                    value={taskName}
+                    onChange={(e) => setTaskName(e.target.value)}
+                    className="modal-input"
+                />
+
+                {/* Description Input */}
+                <input
+                    type="text"
+                    placeholder="Enter task description"
+                    value={taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                    className="modal-input"
+                />
+                {/* Date Reported Input */}
+                <label htmlFor="date-reported">Date Reported
+                    <input
+                        type="date"
+                        placeholder="Enter date reported"
+                        value={taskDateReported}
+                        onChange={(e) => setTaskDateReported(e.target.value)}
+                        className="modal-input"
+                    />
+                </label>
+
+                {/* Status Input */}
+                <select
+                    value={taskStatus}
+                    onChange={(e) => setTaskStatus(e.target.value)}
+                    className="modal-input"
+                >
+                    <option value="1">Open</option>
+                    <option value="2">In Progress</option>
+                    <option value="3">Done</option>
+                </select>
+                {/* Assigned To Input */}
+                <input
+                    type="text"
+                    placeholder="Assigned To"
+                    value={taskAssignedTo}
+                    onChange={(e) => setTaskAssignedTo(e.target.value)}
+                    className="modal-input"
+                />
+                {/* Created By Input */}
+                <input
+                    type="text"
+                    placeholder="Created By"
+                    value={taskCreatedBy}
+                    onChange={(e) => setTaskCreatedBy(e.target.value)}
+                    className="modal-input"/>
+
+                    
+
+                {/* Buttons */}
+                <div className="modal-buttons">
+                    <button onClick={() => handleCancel()} className="modal-cancel">
+                        Cancel
+                    </button>
+                    <button onClick={() => handleSave()} className="modal-save">
+                        Save
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
-      );
-    };
-    
+    );
+};
+
 export default AddNewTaskModal;
