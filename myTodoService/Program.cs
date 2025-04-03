@@ -21,19 +21,23 @@ builder.Services.AddScoped<ITodoService, TodoService>();
 
 
 
+
+
+// Add services to the container
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000") // Allow requests from the React app
-              .AllowAnyHeader() // Allow all headers
-              .AllowAnyMethod(); // Allow GET, POST, PUT, DELETE, etc.
-    });
+    options.AddPolicy("AllowLocalhost",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // Allow your React app
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigin"); // Use the defined CORS policy
+app.UseCors("AllowLocalhost"); // Use the defined CORS policy
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

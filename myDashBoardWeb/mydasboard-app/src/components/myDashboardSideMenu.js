@@ -8,7 +8,7 @@ import { FaPencilAlt } from "react-icons/fa";
 
 const SideMenu = () => {
     return (
-        <div class="side-menu">
+        <div className="side-menu">
             <ul>
                 <li><IoHome /><Link to="/DashboardView">myDasboard</Link></li>
                 <li><FaDollarSign /><Link to="/FinanceView">my Finance</Link></li>

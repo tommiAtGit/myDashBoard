@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Card from "./myDashBoardCardView";
+import TaskModal from "./myDashBoardTodoModal";
 
 
 import './../App.css';
@@ -12,11 +13,12 @@ const TodoView = () => {
     const [doneCards, setDoneCards] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchOpenCards = async () => {
             try {
-                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/1");
+                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/1");
                 setOpenCards(response.data);
                 setLoading(false);
 
@@ -29,7 +31,7 @@ const TodoView = () => {
         };
         const fetchInProgressCards = async () => {
             try {
-                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/2");
+                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/2");
                 setInProgressCards(response.data);
                 setLoading(false);
 
@@ -42,7 +44,7 @@ const TodoView = () => {
         };
         const fetchDoneCards = async () => {
             try {
-                const response = await axios.get("http://localhost:5020/api/todo/taskByStatus/3");
+                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/3");
                 setDoneCards(response.data);
                 setLoading(false);
 
@@ -58,24 +60,54 @@ const TodoView = () => {
         fetchInProgressCards();
         fetchDoneCards();
     }, []);
-
+    const handleSave = async (newTask) => {
+        try {
+            const response = await axios.post("http://localhost:8080/api/todo/addTask", newTask);
+            const savedTask = response.data;
+            if (savedTask.status === "1") {
+                setOpenCards((prevCards) => [...prevCards, savedTask]);
+            } else if (savedTask.status === "2") {
+                setInProgressCards((prevCards) => [...prevCards, savedTask]);
+            } else if (savedTask.status === "3") {
+                setDoneCards((prevCards) => [...prevCards, savedTask]);
+            }
+            setModalOpen(false);
+        } catch (error) {
+            console.error("Error saving task:", error);
+            setError("Failed to save task");
+        }
+    };
+    const handleAddNewTask = () => {
+        setModalOpen(true);
+    }
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    }
+  
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <div>
             <h2>Todo</h2>
-            <div class="button-container">
-                <button class="add-new-button">
+            <div className="button-container">
+                <button className="add-new-button" onClick={() => setModalOpen(true)}>
                     Add New Task
-                </button> 
+                    
+                </button>
+                {/* Modal Component */}
+                <TaskModal
+                    isOpen={isModalOpen}
+                    onClose={() => setModalOpen(false)}
+                    onSave={handleSave}
+                />
             </div>
-            <div class="row">
-                <div class="column-a">
-                    <div class="header-row">
+            <div className="row">
+                <div className="column-a">
+                    <div className="header-row">
                         <h2>Open tasks</h2>
                     </div>
-                    <div class="card-list">
+                    <div className="card-list">
                         {openCards.map((card, index) => (
                             <Card
                                 key={card.id}
@@ -86,11 +118,11 @@ const TodoView = () => {
                         ))}
                     </div>
                 </div>
-                <div class="column-b">
-                    <div class="header-row">
+                <div className="column-b">
+                    <div className="header-row">
                         <h2>Inprogress tasks</h2>
                     </div>
-                    <div class="card-list">
+                    <div className="card-list">
                         {inProgressCards.map((card, index) => (
                             <Card
                                 key={card.id}
@@ -101,11 +133,11 @@ const TodoView = () => {
                         ))}
                     </div>
                 </div>
-                <div class="column-c">
-                    <div class="header-row">
+                <div className="column-c">
+                    <div className="header-row">
                         <h2>Done tasks</h2>
                     </div>
-                    <div class="card-list">
+                    <div className="card-list">
                         {doneCards.map((card, index) => (
                             <Card
                                 key={card.id}
