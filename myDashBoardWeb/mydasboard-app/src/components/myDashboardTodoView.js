@@ -15,42 +15,50 @@ const TodoView = () => {
     const [error, setError] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
 
+    //const baseUrl = "http://localhost:8080/api/todo";
+    const baseUrl = "http://localhost:80/api/todo";
+
     useEffect(() => {
         const fetchOpenCards = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/1");
+                console.log("Fetching open cards from:", baseUrl +"/taskByStatus/1");
+                // Fetch open cards
+                const response = await axios.get(baseUrl +"/taskByStatus/1");
                 setOpenCards(response.data);
                 setLoading(false);
 
             }
             catch (err) {
-                setError("Failed to load cards");
+                setError("Failed to load open cards");
                 setLoading(false);
 
             }
         };
         const fetchInProgressCards = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/2");
+                console.log("Fetching inprogress cards from:", baseUrl +"/taskByStatus/2");
+                // Fetch inprogress cards
+                const response = await axios.get(baseUrl + "/taskByStatus/2");
                 setInProgressCards(response.data);
                 setLoading(false);
 
             }
             catch (err) {
-                setError("Failed to load cards");
+                setError("Failed to load inprogress cards");
                 setLoading(false);
 
             }
         };
         const fetchDoneCards = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/api/todo/taskByStatus/3");
+                console.log("Fetching done cards from:", baseUrl +"/taskByStatus/3");
+                const response = await axios.get(baseUrl +"/taskByStatus/3");
                 setDoneCards(response.data);
                 setLoading(false);
 
             }
             catch (err) {
-                setError("Failed to load cards");
+                setError("Failed to load done cards");
                 setLoading(false);
 
             }
@@ -62,13 +70,19 @@ const TodoView = () => {
     }, []);
     const handleSave = async (newTask) => {
         try {
-            const response = await axios.post("http://localhost:8080/api/todo/addTask", newTask);
+            console.log("Saving task:", newTask);
+            console.log("Saving task to:", baseUrl +"/AddTask");
+            // Save the new task
+            const response = await axios.post(baseUrl +"/AddTask", newTask);
             const savedTask = response.data;
-            if (savedTask.status === "1") {
+            console.log("New task saved with responce:", savedTask);
+            // Update tasks in the respective columns
+
+            if (savedTask.status === 1) {
                 setOpenCards((prevCards) => [...prevCards, savedTask]);
-            } else if (savedTask.status === "2") {
+            } else if (savedTask.status === 2) {
                 setInProgressCards((prevCards) => [...prevCards, savedTask]);
-            } else if (savedTask.status === "3") {
+            } else if (savedTask.status === 3) {
                 setDoneCards((prevCards) => [...prevCards, savedTask]);
             }
             setModalOpen(false);

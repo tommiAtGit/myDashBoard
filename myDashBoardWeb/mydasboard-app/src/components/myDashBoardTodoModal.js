@@ -3,6 +3,7 @@ import "./../todoModal.css";
 
 const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
 
+    const [taskId, setTaskId] = useState(crypto.randomUUID());
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [taskDateReported, setTaskDateReported] = useState("");
@@ -14,23 +15,43 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
     const [taskLastUpdated, setTaskLastUpdated] = useState("");
     const [taskLastUpdatedBy, setTaskLastUpdatedBy] = useState("");
 
+    function generateGUID() {
+        const array = new Uint32Array(8);
+        window.crypto.getRandomValues(array);
+        let str = '';
+        for (let i = 0; i < array.length; i++) {
+            str += array[i].toString(16).padStart(8, '0');
+        }
+        return str;
+    }
+
     const handleSave = () => {
         const newTask = {
+            id: taskId,
             name: taskName,
             description: taskDescription,
-            dateReported: taskDateReported,
-            status: taskStatus,
-            assignedTo: taskAssignedTo,
-            createdBy: taskCreatedBy,
-            createdDate: taskCreatedDate,
-            dueDate: taskDueDate,
-            lastUpdated: taskLastUpdated,
-            lastUpdatedBy: taskLastUpdatedBy
+            reporter: taskCreatedBy,
+            owner: taskAssignedTo,
+
+            //status: taskStatus,
+            status:1,
+            dateReported: handleNewDate(),
+
+            dateOpened: handleNewDate(),
+            dataCompleted: handleNewDate(),
+            dateClosed: handleNewDate(),
         };
 
         onSave(newTask);
         onClose();
     }
+    const handleNewDate = (e) => {
+        console.log("At handleNewDate");
+        const newDate = new Date().toISOString();
+        console.log("New date:", newDate);
+        return newDate;
+    }
+
     const handleCancel = () => {
         onClose();
     }
@@ -92,9 +113,9 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
                     placeholder="Created By"
                     value={taskCreatedBy}
                     onChange={(e) => setTaskCreatedBy(e.target.value)}
-                    className="modal-input"/>
+                    className="modal-input" />
 
-                    
+
 
                 {/* Buttons */}
                 <div className="modal-buttons">
