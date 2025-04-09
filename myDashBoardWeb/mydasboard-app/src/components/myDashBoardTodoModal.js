@@ -34,7 +34,7 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
             owner: taskAssignedTo,
 
             //status: taskStatus,
-            status:1,
+            status:Number(taskStatus),
             dateReported: handleNewDate(),
 
             dateOpened: handleNewDate(),
@@ -59,7 +59,7 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
     return (
         <div className="modal-overlay">
             <div className="modal-container">
-                <h2 className="modal-title">Add New Task</h2>
+                <h2 className="modal-title">Task</h2>
 
                 {/* Title Input */}
                 <input
@@ -98,6 +98,7 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
                     <option value="1">Open</option>
                     <option value="2">In Progress</option>
                     <option value="3">Done</option>
+                    <option value="5">Closed</option>
                 </select>
                 {/* Assigned To Input */}
                 <input

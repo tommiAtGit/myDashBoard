@@ -124,7 +124,8 @@ const TodoView = () => {
                     <div className="card-list">
                         {openCards.map((card, index) => (
                             <Card
-                                key={card.id}
+                                key={index}
+                                id={card.id}
                                 name={card.name}
                                 dateReported={card.dateReported}
                                 description={card.description}

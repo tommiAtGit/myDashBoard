@@ -111,8 +111,16 @@ namespace myTodoService.controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteTask(Guid id)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (id == Guid.Empty)
+                return BadRequest("Id cannot be empty");
+            if (!Guid.TryParse(id.ToString(), out Guid parsedId))
+                return BadRequest("Id is not a valid GUID");
+        
+             _logger.LogInformation($"Delete task with Id: {id}");
             var result = _toDoService.DeleteTask(id);
             if (!result) return NotFound();
+            _logger.LogInformation($"Task with Id: {id} deleted successfully");
             return NoContent();
         }
 

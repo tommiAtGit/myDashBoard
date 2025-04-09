@@ -1,6 +1,10 @@
 import React from "react";
+import axios from "axios";
 import { FaPen, FaTrash } from "react-icons/fa";
 import './../App.css';
+
+ //const baseUrl = "http://localhost:8080/api/todo";
+ const baseUrl = "http://localhost:80/api/todo";
 
 const formatDate = (isoDateString) => {
     const date = new Date(isoDateString); // Parse the ISO date string
@@ -12,6 +16,23 @@ const formatDate = (isoDateString) => {
 };
 
 const Card = ({ id, name, dateReported , description }) => {
+    const handleEdit = (e) => {
+        console.log("Edit button clicked for card ID:", id);
+
+    };
+    const handleDelete = async () => {
+        console.log("Delete button clicked for card ID:", id);
+        // Implement delete logic here
+        const response = await axios.delete(baseUrl +"/" + id);
+       if (response.status === 204) {
+            console.log("Card deleted successfully");
+            // Optionally, you can refresh the card list or update the state here
+        }
+        else {
+            console.error("Failed to delete card");
+        }
+    };
+
     return (
         <div className="card">
             <div className="container">
@@ -23,13 +44,14 @@ const Card = ({ id, name, dateReported , description }) => {
                 <div className="split-content-container">
                     <div className="content-container">{description}</div>
                     <div className="action-container">
-                        <FaPen />
-                        <FaTrash />
+                        <FaPen onClick={handleEdit} />
+                        <FaTrash onClick={handleDelete}/>
                     </div>
                 </div>
             </div>
         </div>
     );
+    
 };
 
 export default Card;
