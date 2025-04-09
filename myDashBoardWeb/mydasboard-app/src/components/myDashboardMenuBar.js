@@ -2,7 +2,7 @@ import React from 'react';
 
 const MenuBar = () => {
     return (
-        <div class= "App-header">
+        <div className= "App-header">
             <h1>my Dashboard</h1>
         </div>
     );

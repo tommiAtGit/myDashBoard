@@ -1,0 +1,68 @@
+/* Modal Background */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Modal Container */
+  .modal-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  /* Modal Title */
+  .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Input Fields */
+  .modal-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Button Container */
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  /* Cancel Button */
+  .modal-cancel {
+    background: #f9f6f6;
+    padding: 8px 12px;
+    border: 1px solid #de1c1c;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .modal-cancel:hover {
+    background: #b3b3b3;
+  }
+  
+  /* Save Button */
+  .modal-save {
+    background: #061F5D;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .modal-save:hover {
+    background: #0056b3;
+  }
