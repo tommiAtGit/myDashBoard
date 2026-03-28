@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  dashboard-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my-dashboard-web
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - dashboard-network
+
+networks:
+  dashboard-network:
+    driver: bridge

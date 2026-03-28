@@ -10,10 +10,12 @@ namespace myTodoService.Services
     public class TodoService : ITodoService
     {
         private TaskRepositoryMoc _repository;
+        private readonly ILogger<TodoService> _logger;
         private IMapper _mapper;
 
-        public TodoService(IMapper mapper)
+        public TodoService(IMapper mapper,ILogger<TodoService> logger)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(_logger));
             _repository = new();
             _mapper = mapper;
         }
@@ -36,10 +38,15 @@ namespace myTodoService.Services
 
         public bool DeleteTask(Guid id)
         {
+             _logger.LogInformation($"Delete task called with Id: {id}");
+            if (id == Guid.Empty)
+                throw new ArgumentNullException(nameof(id), "Id cannot be empty");
+
             MyTaskDTO task = _repository.GetTaskById(id);
             if (task != null)
             {
-                var result = _repository.DeleteTask(task.Id);
+                _logger.LogInformation($"Task found with Id: {id}");
+                var result = _repository.DeleteTask(task);
                 return result;
             }
             else

@@ -10,20 +10,7 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
     const [taskStatus, setTaskStatus] = useState("1"); // Default to "Open" status
     const [taskAssignedTo, setTaskAssignedTo] = useState("");
     const [taskCreatedBy, setTaskCreatedBy] = useState("");
-    const [taskCreatedDate, setTaskCreatedDate] = useState("");
-    const [taskDueDate, setTaskDueDate] = useState("");
-    const [taskLastUpdated, setTaskLastUpdated] = useState("");
-    const [taskLastUpdatedBy, setTaskLastUpdatedBy] = useState("");
-
-    function generateGUID() {
-        const array = new Uint32Array(8);
-        window.crypto.getRandomValues(array);
-        let str = '';
-        for (let i = 0; i < array.length; i++) {
-            str += array[i].toString(16).padStart(8, '0');
-        }
-        return str;
-    }
+    
 
     const handleSave = () => {
         const newTask = {
@@ -44,6 +31,13 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
 
         onSave(newTask);
         onClose();
+    }
+
+    const handleUpdate=() => {
+        const updatedTask = {
+            id: taskId,
+            name: taskName,
+        }
     }
     const handleNewDate = (e) => {
         console.log("At handleNewDate");

@@ -75,7 +75,7 @@ const TodoView = () => {
             // Save the new task
             const response = await axios.post(baseUrl +"/AddTask", newTask);
             const savedTask = response.data;
-            console.log("New task saved with responce:", savedTask);
+            console.log("New task saved with response:", savedTask);
             // Update tasks in the respective columns
 
             if (savedTask.status === 1) {
@@ -91,90 +91,78 @@ const TodoView = () => {
             setError("Failed to save task");
         }
     };
-    const handleAddNewTask = () => {
-        setModalOpen(true);
-    }
-    const handleCloseModal = () => {
-        setModalOpen(false);
-    }
-  
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
-
-    return (
-        <div>
-            <h2>Todo</h2>
-            <div className="button-container">
-                <button className="add-new-button" onClick={() => setModalOpen(true)}>
-                    Add New Task
-                    
-                </button>
-                {/* Modal Component */}
-                <TaskModal
-                    isOpen={isModalOpen}
-                    onClose={() => setModalOpen(false)}
-                    onSave={handleSave}
-                />
-            </div>
-            <div className="row">
-                <div className="column-a">
-                    <div className="header-row">
-                        <h2>Open tasks</h2>
-                    </div>
-                    <div className="card-list">
-                        {openCards.map((card, index) => (
-                            <Card
-                                key={index}
-                                id={card.id}
-                                name={card.name}
-                                dateReported={card.dateReported}
-                                description={card.description}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="column-b">
-                    <div className="header-row">
-                        <h2>Inprogress tasks</h2>
-                    </div>
-                    <div className="card-list">
-                        {inProgressCards.map((card, index) => (
-                            <Card
-                                key={card.id}
-                                name={card.name}
-                                dateReported={card.dateReported}
-                                description={card.description}
-                            />
-                        ))}
-                    </div>
-                </div>
-                <div className="column-c">
-                    <div className="header-row">
-                        <h2>Done tasks</h2>
-                    </div>
-                    <div className="card-list">
-                        {doneCards.map((card, index) => (
-                            <Card
-                                key={card.id}
-                                name={card.name}
-                                dateReported={card.dateReported}
-                                description={card.description}
-                            />
-                        ))}
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    );
+const handleEdit = (id) => {
+    console.log("Edit button clicked for card ID:", id);
+    // Add edit logic here if needed
 };
 
+if (loading) return <div>Loading...</div>;
+if (error) return <div>{error}</div>;
+
+return (
+    <div>
+        <h2>Todo</h2>
+        <div className="button-container">
+            <button className="add-new-button" onClick={() => setModalOpen(true)}>
+                Add New Task
+            </button>
+            {/* Modal Component */}
+            <TaskModal
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                onSave={handleSave}
+            />
+        </div>
+        <div className="row">
+            <div className="column-a">
+                <div className="header-row">
+                    <h2>Open tasks</h2>
+                </div>
+                <div className="card-list">
+                    {openCards.map((card, index) => (
+                        <Card
+                            key={index}
+                            id={card.id}
+                            name={card.name}
+                            dateReported={card.dateReported}
+                            description={card.description}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div className="column-b">
+                <div className="header-row">
+                    <h2>Inprogress tasks</h2>
+                </div>
+                <div className="card-list">
+                    {inProgressCards.map((card, index) => (
+                        <Card
+                            key={card.id}
+                            name={card.name}
+                            dateReported={card.dateReported}
+                            description={card.description}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div className="column-c">
+                <div className="header-row">
+                    <h2>Done tasks</h2>
+                </div>
+                <div className="card-list">
+                    {doneCards.map((card, index) => (
+                        <Card
+                            key={card.id}
+                            name={card.name}
+                            dateReported={card.dateReported}
+                            description={card.description}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+}
 export default TodoView;
-
-
-
-
-
-
-

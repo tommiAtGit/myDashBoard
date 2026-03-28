@@ -30,9 +30,9 @@ namespace myTodoService.Repository
             }
         }
 
-        public bool DeleteTask(Guid Id)
+        public bool DeleteTask(MyTaskDTO theTask)
         {
-            MyTaskDTO theTask = GetTaskById(Id);
+            
             if (theTask != null)
                 return _mocTasks.Remove(theTask);
             else
