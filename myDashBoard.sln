@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myFinaceService", "myFinaceService\myFinaceService.csproj", "{F1155F40-A537-4506-8CBE-95BB1899887E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myFinanceService", "myFinanceService\myFinanceService.csproj", "{F1155F40-A537-4506-8CBE-95BB1899887E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "myFinanceService.Tests", "myFinanceService.Tests\myFinanceService.Tests.csproj", "{DE13176B-5370-46D8-8C06-D0996BCAF4D6}"
 EndProject

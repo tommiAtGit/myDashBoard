@@ -23,9 +23,6 @@
 - **Nullable:** Enabled in .csproj. Use nullable types where appropriate.
 - **Namespaces:** Follow the directory structure (e.g., `myFinanceService.Services`).
 
-## Known Issues / Quirks
-- **Typo:** `myFinaceService` directory and project name contain a typo. Be consistent with the current naming when making changes, but prefer corrected names in new code or namespaces if appropriate.
-
 ## Development Workflow
 - **Docker:** Use `docker-compose.yml` for local development and integration testing.
 - **Verification:** Always run existing tests (`dotnet test`) after any changes to backend services.

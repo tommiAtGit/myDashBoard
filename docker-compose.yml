@@ -4,7 +4,7 @@ services:
   # First: myTodoService
   myTodoService:
     build:
-      context: .
+      context: ./myTodoService
       dockerfile: Dockerfile
     container_name: myTodoService
     environment:
@@ -18,11 +18,11 @@ services:
       - mynetwork
 
   # Second: myFinanceService .NET API container
-  myFinancesService:
+  myFinanceService:
     build:
-      context: .
+      context: ./myFinanceService
       dockerfile: Dockerfile
-    container_name: myFinancesService
+    container_name: myFinanceService
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__MySqlConnectionString=Server=mysql;Database=mydb;User=root;Password=mysecretpassword;
@@ -36,7 +36,7 @@ services:
   # Third: myNotesService .NET API container
   myNotesService:
     build:
-      context: .
+      context: ./myNotesService
       dockerfile: Dockerfile
     container_name: myNotesService
     environment:
