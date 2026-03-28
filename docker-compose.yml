@@ -3,6 +3,7 @@ version: '3.8'
 services:
   # First: myTodoService
   myTodoService:
+    image: mydashboard-todo-service
     build:
       context: ./myTodoService
       dockerfile: Dockerfile
@@ -19,6 +20,7 @@ services:
 
   # Second: myFinanceService .NET API container
   myFinanceService:
+    image: mydashboard-finance-service
     build:
       context: ./myFinanceService
       dockerfile: Dockerfile
@@ -35,6 +37,7 @@ services:
 
   # Third: myNotesService .NET API container
   myNotesService:
+    image: mydashboard-notes-service
     build:
       context: ./myNotesService
       dockerfile: Dockerfile
@@ -59,10 +62,13 @@ services:
       MYSQL_ROOT_PASSWORD: mysecretpassword
       MYSQL_DATABASE: mydb
     ports:
-      - "3306:3306"
+      - "3316:3306"
     networks:
       - mynetwork
-
+volumes:
+  mysql-data:
+    driver: local
+    
 networks:
   mynetwork:
     driver: bridge

@@ -32,6 +32,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseCors("AllowSpecificOrigin"); // Apply CORS policy
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

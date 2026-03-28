@@ -50,7 +50,10 @@ namespace myTodoService.Services
                 return result;
             }
             else
-                throw new ArgumentNullException(nameof(task), "No task defined");
+            {
+                _logger.LogWarning($"Task NOT found with Id: {id}");
+                return false;
+            }
         }
 
         public IEnumerable<MyTask> GetAllTasks()

@@ -1,5 +1,7 @@
 # GEMINI.md - Project-Wide Mandates
 
+# Role: Senior .net and ReactJs Architect
+
 ## Core Technologies
 - **Backend:** .NET 8.0 with ASP.NET Core.
 - **Frontend:** React (Create React App template) with TypeScript.
@@ -22,6 +24,7 @@
 - **Implicit Usings:** Enabled in .csproj.
 - **Nullable:** Enabled in .csproj. Use nullable types where appropriate.
 - **Namespaces:** Follow the directory structure (e.g., `myFinanceService.Services`).
+- **Database:** Assume a PostgreSQL database unless stated otherwise. Use `snake_case` for database columns and `camelCase` for Java fields.
 
 ## Development Workflow
 - **Docker:** Use `docker-compose.yml` for local development and integration testing.

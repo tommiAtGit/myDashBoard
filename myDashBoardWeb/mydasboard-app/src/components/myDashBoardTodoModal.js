@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./../todoModal.css";
 
-const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
+const AddNewTaskModal = ({ isOpen, onClose, onSave, task }) => {
 
     const [taskId, setTaskId] = useState(crypto.randomUUID());
     const [taskName, setTaskName] = useState("");
@@ -10,6 +10,27 @@ const AddNewTaskModal = ({ isOpen, onClose, onSave }) => {
     const [taskStatus, setTaskStatus] = useState("1"); // Default to "Open" status
     const [taskAssignedTo, setTaskAssignedTo] = useState("");
     const [taskCreatedBy, setTaskCreatedBy] = useState("");
+
+    useEffect(() => {
+        if (task && isOpen) {
+            setTaskId(task.id || crypto.randomUUID());
+            setTaskName(task.name || "");
+            setTaskDescription(task.description || "");
+            setTaskDateReported(task.dateReported ? task.dateReported.split('T')[0] : "");
+            setTaskStatus(task.status ? task.status.toString() : "1");
+            setTaskAssignedTo(task.owner || "");
+            setTaskCreatedBy(task.reporter || "");
+        } else if (isOpen) {
+            // Reset fields for a new task
+            setTaskId(crypto.randomUUID());
+            setTaskName("");
+            setTaskDescription("");
+            setTaskDateReported("");
+            setTaskStatus("1");
+            setTaskAssignedTo("");
+            setTaskCreatedBy("");
+        }
+    }, [task, isOpen]);
     
 
     const handleSave = () => {

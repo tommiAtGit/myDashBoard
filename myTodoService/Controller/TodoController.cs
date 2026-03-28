@@ -108,7 +108,7 @@ namespace myTodoService.controllers
         }
 
         // DELETE: api/products/1
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public IActionResult DeleteTask(Guid id)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

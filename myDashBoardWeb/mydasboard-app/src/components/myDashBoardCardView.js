@@ -4,7 +4,7 @@ import { FaPen, FaTrash } from "react-icons/fa";
 import './../App.css';
 
  //const baseUrl = "http://localhost:8080/api/todo";
- const baseUrl = "http://localhost:80/api/todo";
+ const baseUrl = "http://localhost:5001/api/todo";
 
 const formatDate = (isoDateString) => {
     const date = new Date(isoDateString); // Parse the ISO date string
@@ -15,21 +15,40 @@ const formatDate = (isoDateString) => {
     return `${day}.${month}.${year}`; // Return in dd.mm.yyyy format
 };
 
-const Card = ({ id, name, dateReported , description }) => {
-    const handleEdit = (e) => {
+const Card = ({ id, name, dateReported , description, onEdit, onDelete }) => {
+    const handleEdit = async (e) => {
         console.log("Edit button clicked for card ID:", id);
-
+        try {
+            const response = await axios.get(baseUrl + "/" + id);
+            if (response.status === 200 && response.data) {
+                const task = response.data;
+                // Validate the object
+                if (task && task.id && task.name) {
+                    onEdit(task); // Pass the validated object to the modal through the onEdit callback
+                } else {
+                    console.error("Task validation failed:", task);
+                }
+            } else {
+                console.error("Failed to fetch task from:", baseUrl + "/" + id);
+            }
+        } catch (error) {
+            console.error("Error calling GetTaskById:", error);
+        }
     };
     const handleDelete = async () => {
         console.log("Delete button clicked for card ID:", id);
-        // Implement delete logic here
-        const response = await axios.delete(baseUrl +"/" + id);
-       if (response.status === 204) {
-            console.log("Card deleted successfully");
-            // Optionally, you can refresh the card list or update the state here
-        }
-        else {
-            console.error("Failed to delete card");
+        try {
+            const response = await axios.delete(`${baseUrl}/delete/${id}`);
+            if (response.status === 204) {
+                console.log("Card deleted successfully");
+                if (onDelete) {
+                    onDelete(id);
+                }
+            } else {
+                console.error("Failed to delete card");
+            }
+        } catch (error) {
+            console.error("Error deleting card:", error);
         }
     };
 

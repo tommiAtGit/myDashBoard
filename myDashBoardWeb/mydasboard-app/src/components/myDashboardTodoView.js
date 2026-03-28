@@ -14,9 +14,10 @@ const TodoView = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
 
     //const baseUrl = "http://localhost:8080/api/todo";
-    const baseUrl = "http://localhost:80/api/todo";
+    const baseUrl = "http://localhost:5001/api/todo";
 
     useEffect(() => {
         const fetchOpenCards = async () => {
@@ -70,14 +71,27 @@ const TodoView = () => {
     }, []);
     const handleSave = async (newTask) => {
         try {
-            console.log("Saving task:", newTask);
-            console.log("Saving task to:", baseUrl +"/AddTask");
-            // Save the new task
-            const response = await axios.post(baseUrl +"/AddTask", newTask);
-            const savedTask = response.data;
-            console.log("New task saved with response:", savedTask);
-            // Update tasks in the respective columns
+            let savedTask;
+            if (selectedTask) {
+                // Update existing task
+                console.log("Updating task:", newTask);
+                const response = await axios.put(`${baseUrl}/update/${newTask.id}`, newTask);
+                savedTask = response.data;
 
+                // Remove the old task from all lists to handle potential status changes
+                setOpenCards((prev) => prev.filter((c) => c.id !== savedTask.id));
+                setInProgressCards((prev) => prev.filter((c) => c.id !== savedTask.id));
+                setDoneCards((prev) => prev.filter((c) => c.id !== savedTask.id));
+            } else {
+                // Save new task
+                console.log("Saving new task:", newTask);
+                const response = await axios.post(baseUrl + "/AddTask", newTask);
+                savedTask = response.data;
+            }
+
+            console.log("Task saved/updated with response:", savedTask);
+
+            // Add the saved/updated task to the correct column
             if (savedTask.status === 1) {
                 setOpenCards((prevCards) => [...prevCards, savedTask]);
             } else if (savedTask.status === 2) {
@@ -86,15 +100,30 @@ const TodoView = () => {
                 setDoneCards((prevCards) => [...prevCards, savedTask]);
             }
             setModalOpen(false);
+            setSelectedTask(null);
         } catch (error) {
             console.error("Error saving task:", error);
             setError("Failed to save task");
         }
     };
-const handleEdit = (id) => {
-    console.log("Edit button clicked for card ID:", id);
-    // Add edit logic here if needed
-};
+    
+    const openModalForEdit = (task) => {
+        console.log("Opening modal for editing task:", task);
+        setSelectedTask(task);
+        setModalOpen(true);
+    };
+
+    const openModalForNew = () => {
+        setSelectedTask(null);
+        setModalOpen(true);
+    }
+
+    const handleDelete = (id) => {
+        console.log("Task deleted, updating state for ID:", id);
+        setOpenCards((prev) => prev.filter((c) => c.id !== id));
+        setInProgressCards((prev) => prev.filter((c) => c.id !== id));
+        setDoneCards((prev) => prev.filter((c) => c.id !== id));
+    };
 
 if (loading) return <div>Loading...</div>;
 if (error) return <div>{error}</div>;
@@ -103,14 +132,15 @@ return (
     <div>
         <h2>Todo</h2>
         <div className="button-container">
-            <button className="add-new-button" onClick={() => setModalOpen(true)}>
+            <button className="add-new-button" onClick={openModalForNew}>
                 Add New Task
             </button>
             {/* Modal Component */}
             <TaskModal
                 isOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}
+                onClose={() => { setModalOpen(false); setSelectedTask(null); }}
                 onSave={handleSave}
+                task={selectedTask}
             />
         </div>
         <div className="row">
@@ -126,6 +156,8 @@ return (
                             name={card.name}
                             dateReported={card.dateReported}
                             description={card.description}
+                            onEdit={openModalForEdit}
+                            onDelete={handleDelete}
                         />
                     ))}
                 </div>
@@ -138,9 +170,12 @@ return (
                     {inProgressCards.map((card, index) => (
                         <Card
                             key={card.id}
+                            id={card.id}
                             name={card.name}
                             dateReported={card.dateReported}
                             description={card.description}
+                            onEdit={openModalForEdit}
+                            onDelete={handleDelete}
                         />
                     ))}
                 </div>
@@ -153,9 +188,12 @@ return (
                     {doneCards.map((card, index) => (
                         <Card
                             key={card.id}
+                            id={card.id}
                             name={card.name}
                             dateReported={card.dateReported}
                             description={card.description}
+                            onEdit={openModalForEdit}
+                            onDelete={handleDelete}
                         />
                     ))}
                 </div>
