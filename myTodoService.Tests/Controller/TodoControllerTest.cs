@@ -1,6 +1,7 @@
 using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using myTodoService.controllers;
 using myTodoService.Domain;
@@ -14,13 +15,15 @@ namespace myTodoService.Tests.Controllers
     {
         private const int NUMBER_OF_TASKS = 10;
         private readonly Mock<ITodoService> _mockTodoService;
+        private readonly Mock<ILogger<TodoController>> _mockLogger;
         private readonly TodoController _controller;
 
         public TodoControllerTests()
         {
             // Arrange
             _mockTodoService = new Mock<ITodoService>();
-            _controller = new TodoController(_mockTodoService.Object);
+            _mockLogger = new Mock<ILogger<TodoController>>();
+            _controller = new TodoController(_mockTodoService.Object, _mockLogger.Object);
         }
 
         [Fact]

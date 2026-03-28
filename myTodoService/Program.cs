@@ -26,7 +26,7 @@ builder.Services.AddScoped<ITodoService, TodoService>();
 // Add services to the container
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
+    options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
             policy.WithOrigins("http://localhost:3000") // Allow your React app
@@ -37,7 +37,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowLocalhost"); // Use the defined CORS policy
+app.UseCors("AllowSpecificOrigin"); // Use the defined CORS policy
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

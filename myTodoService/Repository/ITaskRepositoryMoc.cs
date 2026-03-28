@@ -13,6 +13,6 @@ namespace myTodoService.Repository
 
         public IEnumerable<MyTaskDTO> GetTasksByDate(DateTime startDate, DateTime EndDate);
         public MyTaskDTO UpdateTask(MyTaskDTO task);
-        public bool DeleteTask(Guid Id);
+        public bool DeleteTask(MyTaskDTO theTask);
     }
 }

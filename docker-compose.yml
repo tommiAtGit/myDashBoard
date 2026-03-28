@@ -3,8 +3,9 @@ version: '3.8'
 services:
   # First: myTodoService
   myTodoService:
+    image: mydashboard-todo-service
     build:
-      context: .
+      context: ./myTodoService
       dockerfile: Dockerfile
     container_name: myTodoService
     environment:
@@ -18,11 +19,12 @@ services:
       - mynetwork
 
   # Second: myFinanceService .NET API container
-  myFinancesService:
+  myFinanceService:
+    image: mydashboard-finance-service
     build:
-      context: .
+      context: ./myFinanceService
       dockerfile: Dockerfile
-    container_name: myFinancesService
+    container_name: myFinanceService
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__MySqlConnectionString=Server=mysql;Database=mydb;User=root;Password=mysecretpassword;
@@ -35,8 +37,9 @@ services:
 
   # Third: myNotesService .NET API container
   myNotesService:
+    image: mydashboard-notes-service
     build:
-      context: .
+      context: ./myNotesService
       dockerfile: Dockerfile
     container_name: myNotesService
     environment:
@@ -59,10 +62,13 @@ services:
       MYSQL_ROOT_PASSWORD: mysecretpassword
       MYSQL_DATABASE: mydb
     ports:
-      - "3306:3306"
+      - "3316:3306"
     networks:
       - mynetwork
-
+volumes:
+  mysql-data:
+    driver: local
+    
 networks:
   mynetwork:
     driver: bridge
