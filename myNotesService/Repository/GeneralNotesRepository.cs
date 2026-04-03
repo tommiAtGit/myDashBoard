@@ -4,7 +4,6 @@ using myNotesService.Repository;
 namespace myNotesService.Repository
 {
 
-}
 public class GeneralNotesReporitory : IGeneralNotesRpository
 {
     private List<GeneralNotesDTO> _genNotes;
@@ -12,6 +11,7 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
     public GeneralNotesReporitory()
     {
         _genNotes = [];
+        GenerateMockGeneralNotes();
     }
     public GeneralNotesDTO AddGeneralNotes(GeneralNotesDTO notes)
     {
@@ -32,10 +32,10 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
     public bool DeleteGeneralNote(Guid id)
     {
         GeneralNotesDTO theNotes = GetGeneralNotesById(id);
-        if (theNotes != null)
+        if (theNotes.id != Guid.Empty)
             return _genNotes.Remove(theNotes);
         else
-            throw new ArgumentNullException("NotFound", nameof(theNotes));
+            return false;
 
 
     }
@@ -68,7 +68,7 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
 
     public IEnumerable<GeneralNotesDTO> GetGeneralNotesByKeyWords(List<string> keyWords)
     {
-        IEnumerable<GeneralNotesDTO> keyWordNotes = [];
+        List<GeneralNotesDTO> keyWordNotes = [];
         var notes = GetAllGeneralNotes();
         foreach (GeneralNotesDTO o in notes)
         {
@@ -76,7 +76,7 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
             {
                 if (o.KeyWords.Contains(keyWord))
                 {
-                    keyWordNotes = keyWordNotes.Append(o);
+                    keyWordNotes.Add(o);
                 }
             }
         }
@@ -96,20 +96,34 @@ public class GeneralNotesReporitory : IGeneralNotesRpository
     public GeneralNotesDTO UpdateGeneralNotes(Guid id,GeneralNotesDTO notes)
     {
         var n = GetGeneralNotesById(id);
-        if(n==null)
+        if(n.id==Guid.Empty)
             throw new ArgumentNullException("NotFound", nameof(notes));
         int index = _genNotes.IndexOf(n);
-        _genNotes.Remove(n);
-        _genNotes.Add(notes);
+        _genNotes[index] = notes;
         return notes;
-
-        
-
     }
 
     private void GenerateMockGeneralNotes(){
-
+        _genNotes.Add(new GeneralNotesDTO {
+            id = Guid.NewGuid(),
+            NotesTiltle = "First Note",
+            Notes = "This is the content of the first note. It covers various topics related to project management and design.",
+            NotesConclution = "Conclusion of the first note: prioritize tasks.",
+            KeyWords = ["test", "first", "management"],
+            DateCreatad = DateTime.Now,
+            Owner = "Tommi"
+        });
+        _genNotes.Add(new GeneralNotesDTO {
+            id = Guid.NewGuid(),
+            NotesTiltle = "Second Note",
+            Notes = "This is the content of the second note. Focuses on development workflows and backend services.",
+            NotesConclution = "Conclusion of the second note: use automation.",
+            KeyWords = ["test", "second", "development"],
+            DateCreatad = DateTime.Now.AddDays(-1),
+            Owner = "Tommi"
+        });
 
     }
 
+}
 }

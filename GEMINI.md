@@ -4,7 +4,7 @@
 
 ## Core Technologies
 - **Backend:** .NET 8.0 with ASP.NET Core.
-- **Frontend:** React (Create React App template) with TypeScript.
+- **Frontend:** React (Create React App template) with JavaScript.
 - **Infrastructure:** Docker and Docker Compose.
 - **Libraries:** AutoMapper for DTO mapping, Moq for mocking in tests, xUnit for testing.
 
