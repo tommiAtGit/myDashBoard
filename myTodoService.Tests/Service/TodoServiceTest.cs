@@ -4,6 +4,8 @@ using myTodoService.Model;
 using myTodoService.Domain;
 using myTodoService.controllers;
 using myTodoService.Mapper;
+using Moq;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 
 namespace myTodoService.Services.Tests
@@ -15,6 +17,7 @@ namespace myTodoService.Services.Tests
         private const string TASK_DESCRIPTION = "New task for testig";
         private TodoService _service;
         private IMapper _mapper;
+        private Mock<ILogger<TodoService>> _mockLogger;
 
         public TodoServiceTests()
         {
@@ -24,8 +27,9 @@ namespace myTodoService.Services.Tests
             });
 
             _mapper = config.CreateMapper();
+            _mockLogger = new Mock<ILogger<TodoService>>();
 
-            _service = new(_mapper);
+            _service = new(_mapper, _mockLogger.Object);
         }
         [Fact]
         public void AddNewTaskTest()

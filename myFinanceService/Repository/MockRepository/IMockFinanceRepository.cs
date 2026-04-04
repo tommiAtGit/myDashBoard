@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 
 namespace myFinanceService.Repository{
-    public interface IMockFinanceTrackerRepository{
+    public interface IMockFinanceRepository{
         public IEnumerable<FinanceDTO> GetAllTransactions();
         public FinanceDTO GetTransactionById(Guid id);
         public IEnumerable<FinanceDTO> GetTransactionByDate(DateTime startTime, DateTime EndTime);

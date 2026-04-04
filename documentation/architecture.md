@@ -12,7 +12,11 @@ The frontend is built as a Single Page Application (SPA) using **React 18** and 
 - **API Communication:** Axios for making asynchronous HTTP requests to backend services.
 - **State Management:** Uses React Hooks (`useState`, `useEffect`) for local component state and data fetching.
 - **Key Components:**
-    - `myDashBoardFinanceView`: Interface for financial tracking.
+    - `myDashBoardFinanceView`: Dashboard for financial tracking, including:
+        - **Balance Sheet Overview**: Displays Assets, Liabilities, and calculated Total Balance.
+        - **Transaction Management**: Account selection and full CRUD for financial transactions via `myDashboardFinanceModal`.
+        - **Live Balance**: Real-time calculation of account balance based on transaction history.
+        - **Budget Planning**: Management of budget targets per account via `myDashboardBudgetModal`.
     - `myDashboardNotesView`: Tabbed interface for notes management and "Active Recall" exercises.
     - `myDashboardTodoView`: Dashboard for managing tasks across different statuses.
 

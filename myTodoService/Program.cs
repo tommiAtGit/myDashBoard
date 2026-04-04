@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register AutoMapper with DI
-builder.Services.AddAutoMapper(typeof(MappingProfile)); 
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>()); 
 
 builder.WebHost.UseUrls("http://0.0.0.0:80");
 
@@ -29,7 +29,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Allow your React app
+            policy.WithOrigins("http://localhost:3000", "http://localhost:3000/") // Allow both variations
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
@@ -37,7 +37,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigin"); // Use the defined CORS policy
+app.UseRouting(); // Explicitly add routing
+
+app.UseCors("AllowSpecificOrigin"); // Use the defined CORS policy between routing and controllers
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

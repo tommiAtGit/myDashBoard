@@ -55,13 +55,15 @@ namespace myFinanceService.Repository
             _balanceSheets.Add(new BalanceSheetDTO
             {
                 Id = Guid.Parse("a1a23202-3e9f-4284-8959-3cfa5cb39100"),
-                BalanceSheetItemValue = 5000.0,
+                BalanceSheetItemValue = 10000.0,
                 BalanceSheetItemCreated = DateTime.Now.AddDays(-10),
                 BalanceSheetItemChanged = DateTime.Now.AddDays(-5),
                 Items = new List<BalanceSheetItemDTO>
                 {
-                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Asset 1" },
-                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Asset 2" }
+                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Cash", Value = 5000.0, Type = BalanceSheetItemType.ASSET },
+                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Stocks", Value = 7000.0, Type = BalanceSheetItemType.ASSET },
+                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Credit Card", Value = 2000.0, Type = BalanceSheetItemType.LIABILITY },
+                    new BalanceSheetItemDTO { Id = Guid.NewGuid(), ItemName = "Total Balance", Value = 10000.0, Type = BalanceSheetItemType.BALANCE }
                 }
             });
         }

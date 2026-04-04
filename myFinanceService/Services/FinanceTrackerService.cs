@@ -9,7 +9,7 @@ namespace myFinanceService.Services
 {
     public class FinanceTrackerService(IMapper mapper) : IFinanceTrackerService
     {
-        private IMockFinanceTrackerRepository _repository = new MockFinanceTrackerRepository();
+        private IMockFinanceRepository _repository = new MockFinanceTrackerRepository();
         private IMapper _mapper = mapper;
 
         public Finance AddTransaction(Finance newTransaction)
