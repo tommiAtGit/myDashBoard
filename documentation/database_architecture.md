@@ -6,7 +6,7 @@ This document describes the database schema for the myDashBoard application. The
 
 ```mermaid
 erDiagram
-    FINANCE_TRANSACTION {
+    FINANCE {
         guid id PK
         int type
         string account
@@ -14,6 +14,14 @@ erDiagram
         double amount
         datetime action_date
     }
+    FINANCE_CATEGORY {
+        guid id PK
+        guid finance_id FK
+        string category
+    }
+
+    FINANCE ||--o{ FINANCE_CATEGORY : "has"
+    
     BALANCE {
         guid id PK
         string account
@@ -28,6 +36,20 @@ erDiagram
         datetime budget_start_date
         datetime budget_end_date
     }
+    BALANCE_SHEET{
+        guid id PK
+        double balance_sheet_item_value 
+        datetime balance_sheet_item_created 
+        datetime balance_sheet_item_changed 
+    }
+
+    BALANCE_SHEET_ITEM{
+        guid id PK
+        balance_sheet_id FK
+        string item_name
+    }
+    BALANCE_SHEET ||--o{ BALANCE_SHEET_ITEM : "has"
+
     GENERAL_NOTE {
         guid id PK
         string title
@@ -71,6 +93,12 @@ Stores individual financial transactions.
 - `description`: String, transaction details.
 - `amount`: Double, the monetary value.
 - `action_date`: DateTime, when the transaction occurred.
+
+#### FINANCE_CATEGORY
+Stores categories associated with transactions (One-to-Many).
+- `id`: GUID, Primary Key.
+- `transaction_id`: GUID, Foreign Key to `FINANCE_TRANSACTION(id)`.
+- `category`: String, tag for searching.
 
 #### BALANCE
 Stores the current balance for accounts.
