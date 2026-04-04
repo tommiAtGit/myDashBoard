@@ -11,6 +11,7 @@ namespace myFinanceService.Domain
         public string Description { get; set; }="";
         public Double Amount { get; set; }
         public DateTime ActionDate { get; set; }
+        public List<FinanceGategoryDTO> Categories { get; set; } = new();
         
 
     }

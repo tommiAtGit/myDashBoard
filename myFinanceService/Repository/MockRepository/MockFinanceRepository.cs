@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace myFinanceService.Repository
 {
-    public class MockFinanceTrackerRepository : IMockFinanceTrackerRepository
+    public class MockFinanceTrackerRepository : IMockFinanceRepository
     {
         private List<FinanceDTO> _financeRepo;
 

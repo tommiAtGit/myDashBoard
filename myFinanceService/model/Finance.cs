@@ -8,5 +8,6 @@ namespace myFinanceService.Model{
         public string Description { get; set; }="";
         public Double Amount { get; set; }
         public DateTime ActionDate { get; set; }
+        public List<FinanceGategory> Categories { get; set; } = new();
     }
 }

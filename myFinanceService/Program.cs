@@ -20,6 +20,8 @@ builder.Services.AddScoped<IMyHealthService, MyHealthService>();
 builder.Services.AddScoped<IFinanceTrackerService, FinanceTrackerService>();
 builder.Services.AddScoped<IBalanceService, BalanceService>();
 builder.Services.AddScoped<IBudgetService, BudgetService>();
+builder.Services.AddScoped<IMockBalanceSheetRepository, MockBalanceSheetRepository>();
+builder.Services.AddScoped<IBalanceSheetService, BalanceSheetService>();
 
 builder.Services.AddCors(options =>
 {

@@ -29,8 +29,8 @@ The backend consists of three independent microservices built with **.NET 8.0** 
 ### Services
 
 #### myFinanceService
-- **Goal:** Manages financial balances, budgets, and transactions.
-- **Endpoints:** Handles balance updates, budget creation, and transaction history.
+- **Goal:** Manages financial balances, budgets, transactions, and balance sheets.
+- **Endpoints:** Handles balance updates, budget creation, transaction history, and BalanceSheet CRUD operations.
 - **Port:** 5002
 
 #### myNotesService
