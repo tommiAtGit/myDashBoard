@@ -5,7 +5,8 @@ using myTodoService.Domain;
 using myTodoService.controllers;
 using myTodoService.Mapper;
 using Moq;
-using Microsoft.Extensions.Logging;
+using myTodoService.Mapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Serialization;
 
 namespace myTodoService.Services.Tests
@@ -24,7 +25,7 @@ namespace myTodoService.Services.Tests
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>(); // Reuse your main profile
-            });
+            }, NullLoggerFactory.Instance);
 
             _mapper = config.CreateMapper();
             _mockLogger = new Mock<ILogger<TodoService>>();

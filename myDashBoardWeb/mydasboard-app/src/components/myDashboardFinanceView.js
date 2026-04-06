@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import { FaPen, FaTrash, FaPlus } from 'react-icons/fa';
+import { FaPen, FaTrash } from 'react-icons/fa';
 import FinanceModal from './myDashboardFinanceModal';
 import BudgetModal from './myDashboardBudgetModal';
+import BalanceSheetModal from './myDashboardBalanceSheetModal';
 import './../App.css';
 
 const FinanceView = () => {
@@ -16,6 +17,7 @@ const FinanceView = () => {
     // Modal states
     const [isFinanceModalOpen, setFinanceModalOpen] = useState(false);
     const [isBudgetModalOpen, setBudgetModalOpen] = useState(false);
+    const [isBSModalOpen, setBSModalOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [editingBudget, setEditingBudget] = useState(null);
 
@@ -129,6 +131,16 @@ const FinanceView = () => {
         }
     };
 
+    const handleSaveBalanceSheet = async (updatedSheet) => {
+        try {
+            await axios.put(`${baseUrl}/BalanceSheet/${updatedSheet.id}`, updatedSheet);
+            setBalanceSheets(balanceSheets.map(bs => bs.id === updatedSheet.id ? updatedSheet : bs));
+            setBSModalOpen(false);
+        } catch (err) {
+            console.error("Error saving balance sheet:", err);
+        }
+    };
+
     const handleDeleteTransaction = async (id) => {
         if (!window.confirm("Delete this transaction?")) return;
         try {
@@ -148,7 +160,13 @@ const FinanceView = () => {
 
             {/* 1. Balance Sheet Section */}
             <section className="finance-section">
-                <h3>Balance Sheet Overview</h3>
+                <div className="new-doc-btn-container" style={{ position: 'relative', marginBottom: '15px' }}>
+                    <h3 style={{ margin: 0, border: 'none', position: 'absolute', left: 0 }}>Balance Sheet Overview</h3>
+                    <div style={{ width: '30%', visibility: 'hidden' }}></div>
+                    <button className="add-btn" onClick={() => setBSModalOpen(true)}>
+                        Edit Balance Sheet
+                    </button>
+                </div>
                 <div className="balance-sheet-grid">
                     <div className="bs-card asset">
                         <h4>Assets</h4>
@@ -167,7 +185,14 @@ const FinanceView = () => {
 
             {/* 2. Finance Section (Transactions) */}
             <section className="finance-section">
-                <h3>Finance - Transactions</h3>
+                <div className="new-doc-btn-container" style={{ position: 'relative', marginBottom: '15px' }}>
+                    <h3 style={{ margin: 0, border: 'none', position: 'absolute', left: 0 }}>Finance - Transactions</h3>
+                    <div style={{ width: '30%', visibility: 'hidden' }}></div>
+                    <button className="add-btn" onClick={() => { setEditingTransaction(null); setFinanceModalOpen(true); }}>
+                        Add Transaction
+                    </button>
+                </div>
+                
                 <div className="account-selector">
                     <label>Selected Account: </label>
                     <select value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
@@ -176,9 +201,7 @@ const FinanceView = () => {
                         ))}
                     </select>
                 </div>
-                <button className="add-btn" onClick={() => { setEditingTransaction(null); setFinanceModalOpen(true); }}>
-                    <FaPlus /> Add Transaction
-                </button>
+
                 <table className="finance-table">
                     <thead>
                         <tr>
@@ -199,12 +222,8 @@ const FinanceView = () => {
                                     {t.type === 2 ? '-' : '+'}${t.amount.toLocaleString()}
                                 </td>
                                 <td>
-                                    <button className="action-btn" onClick={() => { setEditingTransaction(t); setFinanceModalOpen(true); }}>
-                                        <FaPen />
-                                    </button>
-                                    <button className="action-btn" onClick={() => handleDeleteTransaction(t.id)}>
-                                        <FaTrash />
-                                    </button>
+                                    <FaPen onClick={() => { setEditingTransaction(t); setFinanceModalOpen(true); }} style={{ cursor: 'pointer', marginRight: '10px' }} />
+                                    <FaTrash onClick={() => handleDeleteTransaction(t.id)} style={{ cursor: 'pointer' }} />
                                 </td>
                             </tr>
                         ))}
@@ -221,10 +240,14 @@ const FinanceView = () => {
 
             {/* 4. Budget Section */}
             <section className="finance-section">
-                <h3>Budget Planning</h3>
-                <button className="add-btn" onClick={() => { setEditingBudget(null); setBudgetModalOpen(true); }}>
-                    <FaPlus /> Add Budget Item
-                </button>
+                <div className="new-doc-btn-container" style={{ position: 'relative', marginBottom: '15px' }}>
+                    <h3 style={{ margin: 0, border: 'none', position: 'absolute', left: 0 }}>Budget Planning</h3>
+                    <div style={{ width: '30%', visibility: 'hidden' }}></div>
+                    <button className="add-btn" onClick={() => { setEditingBudget(null); setBudgetModalOpen(true); }}>
+                        Add Budget Item
+                    </button>
+                </div>
+
                 <table className="budget-table">
                     <thead>
                         <tr>
@@ -243,9 +266,7 @@ const FinanceView = () => {
                                 <td>{new Date(b.budgetStartDate).toLocaleDateString()}</td>
                                 <td>{new Date(b.budgetEndDate).toLocaleDateString()}</td>
                                 <td>
-                                    <button className="action-btn" onClick={() => { setEditingBudget(b); setBudgetModalOpen(true); }}>
-                                        <FaPen />
-                                    </button>
+                                    <FaPen onClick={() => { setEditingBudget(b); setBudgetModalOpen(true); }} style={{ cursor: 'pointer' }} />
                                 </td>
                             </tr>
                         ))}
@@ -265,6 +286,12 @@ const FinanceView = () => {
                 onClose={() => setBudgetModalOpen(false)} 
                 onSave={handleSaveBudget}
                 budget={editingBudget}
+            />
+            <BalanceSheetModal
+                isOpen={isBSModalOpen}
+                onClose={() => setBSModalOpen(false)}
+                onSave={handleSaveBalanceSheet}
+                balanceSheet={balanceSheets[0]}
             />
         </div>
     );

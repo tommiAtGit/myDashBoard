@@ -6,6 +6,7 @@ using myFinanceService.Services;
 using NuGet.Frameworks;
 using AutoMapper;
 using myFinanceService.Mapper;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace myFinanceService.Tests.Services
 {
@@ -24,7 +25,7 @@ namespace myFinanceService.Tests.Services
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>(); // Reuse your main profile
-            });
+            }, NullLoggerFactory.Instance);
 
             _mapper = config.CreateMapper();
 

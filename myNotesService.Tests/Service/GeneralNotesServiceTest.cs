@@ -5,6 +5,7 @@ using myNotesService.Repository;
 using myNotesService.Services;
 using AutoMapper;
 using myNotesService.TestUtils;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace myNotesService.Tests
 {
@@ -20,7 +21,7 @@ namespace myNotesService.Tests
             var config = new MapperConfiguration(cfg =>
         {
             cfg.AddProfile<MappingProfile>(); // Reuse your main profile
-        });
+        }, NullLoggerFactory.Instance);
 
             _mapper = config.CreateMapper();
             _service = new(_mapper);
