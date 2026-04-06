@@ -509,6 +509,114 @@
   padding: 10px;
   text-align: left;
   border-radius: 4px;
-  margin: 60px 0 0 0;
+  margin: 20px 0 0 0;
 }
+
+/* Finance View Styles */
+.finance-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.finance-section {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.finance-section h3 {
+  margin-top: 0;
+  border-bottom: 2px solid #061F5D;
+  padding-bottom: 10px;
+  color: #061F5D;
+}
+
+.balance-sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.bs-card {
+  background-color: #fff;
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.bs-card.asset { border-top: 4px solid green; }
+.bs-card.liability { border-top: 4px solid red; }
+.bs-card.balance { border-top: 4px solid blue; }
+
+.finance-table, .budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.finance-table th, .finance-table td,
+.budget-table th, .budget-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.finance-table th, .budget-table th {
+  background-color: #eee;
+}
+
+.finance-table th:first-child, .finance-table td:first-child {
+  width: 100px; /* Approximately 12 characters */
+  white-space: nowrap;
+}
+
+.finance-table th:last-child, .finance-table td:last-child {
+  width: 100px; /* Increased to fit icons on one line */
+  text-align: center;
+}
+
+.finance-table th:nth-child(1), .finance-table td:nth-child(1) {
+  width: auto; /* Expand to take saved space */
+}
+
+.account-selector {
+  margin-bottom: 20px;
+}
+
+.account-selector select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 300px;
+}
+
+.balance-display {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #061F5D;
+}
+
+.action-btn {
+  padding: 5px 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #061F5D;
+}
+
+.add-btn {
+  background-color: #061F5D;
+  color: white;
+  padding: 10px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 30%;
+}
+
 

@@ -12,8 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IHealthService, HealthService>();
 
 // Register AutoMapper with DI
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>()); 
 builder.WebHost.UseUrls("http://0.0.0.0:80");
 
 // Register custom services
@@ -24,15 +23,17 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // Allow requests from the React app
-              .AllowAnyHeader() // Allow all headers
-              .AllowAnyMethod(); // Allow GET, POST, PUT, DELETE, etc.
+        policy.WithOrigins("http://localhost:3000", "http://localhost:3000/") // Allow both variations
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigin"); // Apply CORS policy
+app.UseRouting(); // Explicitly add routing
+
+app.UseCors("AllowSpecificOrigin"); // Apply CORS policy between routing and controllers
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

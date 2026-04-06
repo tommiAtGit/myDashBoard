@@ -7,6 +7,8 @@
 - **Frontend:** React (Create React App template) with JavaScript.
 - **Infrastructure:** Docker and Docker Compose.
 - **Libraries:** AutoMapper for DTO mapping, Moq for mocking in tests, xUnit for testing.
+- **Version Control:** Git.
+
 
 ## Architectural Patterns
 - **Services:** Follow a N-tier architecture (Controller -> Service -> Repository).
@@ -28,4 +30,9 @@
 
 ## Development Workflow
 - **Docker:** Use `docker-compose.yml` for local development and integration testing.
+- **Vulnerabilities:** Alvays check for unknown vulnerabilities for used libraries. Fix the vulnerabilities by updating the libraries.  
 - **Verification:** Always run existing tests (`dotnet test`) after any changes to backend services.
+- **Frontend verification:** Always run exciting tests after any change to frontend services.
+- **CI/CD:** Update docker container after chages to backend services. Run `docker compose down` and docker `compose up`.
+
+

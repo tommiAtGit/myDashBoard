@@ -51,6 +51,14 @@ namespace myFinanceService.controllers
             return Ok(financeAction);
         }
 
+        [HttpGet("account/{account}")]
+        public ActionResult<IEnumerable<Finance>> GetTransactionsByAccount(string account)
+        {
+            if (string.IsNullOrEmpty(account)) return BadRequest("Account is required");
+            var transactions = _service.GetTransactionsByAccount(account);
+            return Ok(transactions);
+        }
+
         [HttpPost]
         public ActionResult<Finance> AddTransaction([FromBody] Finance transAction)
         {
